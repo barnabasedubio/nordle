@@ -1,0 +1,13 @@
+{
+	"name": "makeabugreport-devcontainer",
+	"dockerFile": "Dockerfile",
+	"forwardPorts": [ 3000 ],
+	"extensions": [
+		"vue.volar",
+		"hollowtree.vue-snippets",
+		"ms-azuretools.vscode-docker",
+		"esbenp.prettier-vscode",
+		"formulahendry.auto-rename-tag"
+	],
+	"shutdownAction": "stopContainer"
+}
