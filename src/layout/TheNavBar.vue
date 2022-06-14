@@ -1,9 +1,5 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-<header>
+<div class="container mx-auto bg-red-300">
 	<p>This is a test!</p>
-</header>
+</div>
 </template>

@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { useStore } from "../store/store.js"
 
+const store = useStore()
+const testValue: String = store.wordList[0]
 </script>
 
 <template>
 <div>
-	This is a third test!
+{{ testValue }}
 </div>
 </template>
