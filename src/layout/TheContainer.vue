@@ -11,12 +11,12 @@ const testValue: String = store.todaysWord.toUpperCase();
   {{ testValue }}
   <div class="flex flex-col justify-center">
     <div class="sm:mx-auto border-solid border-2 border-blue-500">
-      <WordRow/>
-      <WordRow/>
-      <WordRow/>
-      <WordRow/>
-      <WordRow/>
-      <WordRow/>
+      <WordRow row="0"/>
+      <WordRow row="1"/>
+      <WordRow row="2"/>
+      <WordRow row="3"/>
+      <WordRow row="4"/>
+      <WordRow row="5"/>
     </div>
 		<div class="sm:mx-auto mt-8 border-solid border-2 border-blue-500">
 			<Keyboard/>

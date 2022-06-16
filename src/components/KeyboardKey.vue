@@ -1,18 +1,20 @@
 <script setup lang="ts">
+import { useStore } from "../store/store.js";
+
+const store = useStore();
 const props = defineProps({
   val: {
     type: String,
-    requred: true,
+    required: true,
   },
 });
-
-function sendKey() {
-	console.log(`sending key ${props.val}`)
-}
 </script>
 
 <template>
-  <div @click="sendKey" class="p-3 border-solid border-2 border-red-500 cursor-pointer">
+  <div
+    @click="store.sendKey(props.val)"
+    class="p-3 border-solid border-2 border-red-500 cursor-pointer"
+  >
     {{ props.val }}
   </div>
 </template>
