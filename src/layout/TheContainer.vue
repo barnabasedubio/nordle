@@ -18,7 +18,7 @@ const testValue: String = store.todaysWord.toUpperCase();
       <WordRow row="4"/>
       <WordRow row="5"/>
     </div>
-		<div class="sm:mx-auto mt-8 border-solid border-2 border-blue-500">
+		<div v-if="store.acceptingInputs" class="sm:mx-auto mt-8 border-solid border-2 border-blue-500">
 			<Keyboard/>
 		</div>
   </div>
