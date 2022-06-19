@@ -8,11 +8,17 @@ const props = defineProps({
     required: true,
   },
 });
+
+function sendKey() {
+	if (store.acceptingInputs) {
+		store.sendKey(props.val)
+	}
+}
 </script>
 
 <template>
   <div
-    @click="store.sendKey(props.val)"
+    @click="sendKey"
     class="p-3 border-solid border-2 border-red-500 cursor-pointer"
   >
     {{ props.val }}
