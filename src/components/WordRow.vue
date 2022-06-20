@@ -33,10 +33,10 @@ function matchColor(index: number) {
 
 <template>
   <div class="flex">
-    <word-row-letter :class="matchColor(0)">{{ getLetter(0) }}</word-row-letter>
-    <word-row-letter :class="matchColor(1)">{{ getLetter(1) }}</word-row-letter>
-    <word-row-letter :class="matchColor(2)">{{ getLetter(2) }}</word-row-letter>
-    <word-row-letter :class="matchColor(3)">{{ getLetter(3) }}</word-row-letter>
-    <word-row-letter :class="matchColor(4)">{{ getLetter(4) }}</word-row-letter>
+		<WordRowLetter :class="matchColor(0)" :letter="getLetter(0)"/>
+		<WordRowLetter :class="matchColor(1)" :letter="getLetter(1)"/>
+		<WordRowLetter :class="matchColor(2)" :letter="getLetter(2)"/>
+		<WordRowLetter :class="matchColor(3)" :letter="getLetter(3)"/>
+		<WordRowLetter :class="matchColor(4)" :letter="getLetter(4)"/>
   </div>
 </template>
