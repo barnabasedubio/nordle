@@ -10,6 +10,9 @@ interface IState {
   enteredWords: string[];
   matchColors: string[][];
   acceptingInputs: boolean;
+  lettersConfirmedCorrect: string[];
+  lettersConfirmedIncluded: string[];
+  lettersConfirmedNotIncluded: string[];
 }
 
 interface IWordMap {
@@ -21,19 +24,20 @@ export const useStore = defineStore("main", {
     return {
       validWordList,
       solutionWordList,
-      todaysWord: solutionWordList[2112],
+      todaysWord: solutionWordList[369],
       currentWordAsArray: [],
       enteredWords: [],
       matchColors: new Array(6)
         .fill(undefined)
         .map((x) => new Array(5).fill(" ")),
       acceptingInputs: true,
+      lettersConfirmedCorrect: [],
+      lettersConfirmedIncluded: [],
+      lettersConfirmedNotIncluded: [],
     };
   },
   getters: {
-    todaysWordAsArray(state): string[] {
-      return state.todaysWord.split("");
-    },
+    todaysWordAsArray: (state): string[] => state.todaysWord.split(""),
     todaysWordAsMap(state): IWordMap {
       const wordMap: IWordMap = {};
       for (const letter of state.todaysWord) {
@@ -51,6 +55,18 @@ export const useStore = defineStore("main", {
         this.acceptingInputs = false;
       }
       return false;
+    },
+    updateLetters(enteredWord: string[], matchColor: string[]): void {
+      // look at the current entered word and the current color match
+      // based on that info update the lists of letters chosen
+      for (let i = 0; i < enteredWord.length; i++) {
+        if (matchColor[i] === "green")
+          this.lettersConfirmedCorrect.push(enteredWord[i]);
+        if (matchColor[i] === "yellow")
+          this.lettersConfirmedIncluded.push(enteredWord[i]);
+        if (matchColor[i] === "gray")
+          this.lettersConfirmedNotIncluded.push(enteredWord[i]);
+      }
     },
     evaluateWord(enteredWord: string[]): void {
       enteredWord = enteredWord.map((letter) => letter.toLowerCase());
@@ -77,6 +93,10 @@ export const useStore = defineStore("main", {
           wordMap[enteredWord[i]]--;
         }
       }
+      this.updateLetters(
+        enteredWord,
+        this.matchColors[this.enteredWords.length]
+      );
       this.enteredWords.push(enteredWord.join(""));
     },
     sendKey(value: string): void {

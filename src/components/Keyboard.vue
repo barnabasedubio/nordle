@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import KeyboardKey from "./KeyboardKey.vue";
-
 </script>
 
 <template>
