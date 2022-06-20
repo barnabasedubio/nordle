@@ -10,9 +10,9 @@ const props = defineProps({
 });
 
 function getWidth() {
-	if (props.val === "ENTER" || props.val === "DEL") {
-		return " max-w-18"
-	} else return " w-12"
+  if (props.val === "ENTER" || props.val === "DEL") {
+    return " max-w-18";
+  } else return " w-12";
 }
 
 function getColor(): string {
@@ -23,9 +23,9 @@ function getColor(): string {
     return "bg-nord12";
   }
   if (store.lettersConfirmedNotIncluded.includes(props.val.toLowerCase())) {
-    return "bg-nord3";
+    return "bg-nord0";
   }
-  return "";
+  return "bg-nord3";
 }
 
 function sendKey(): void {
@@ -38,9 +38,11 @@ function sendKey(): void {
 <template>
   <div
     @click="sendKey"
-    class="h-14 p-3 border-solid border-2 border-red-500 cursor-pointer m-0.5"
+    class="flex justify-center items-center h-14 p-3 border-solid border-2 cursor-pointer m-0.5"
     :class="getColor() + getWidth()"
   >
-    {{ props.val }}
+    <div class="h-5 select-none font-medium">
+      {{ props.val }}
+    </div>
   </div>
 </template>
