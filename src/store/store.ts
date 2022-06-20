@@ -113,7 +113,7 @@ export const useStore = defineStore("main", {
           this.checkIfGameOver();
           this.currentWordAsArray = [];
         }
-      } else if (value === "DELETE") {
+      } else if (value === "DEL") {
         if (!!this.currentWordAsArray.length) {
           this.currentWordAsArray.pop();
         }

@@ -4,7 +4,7 @@ import KeyboardKey from "./KeyboardKey.vue";
 
 <template>
   <div>
-    <div class="flex">
+    <div class="flex justify-between">
 			<KeyboardKey val="Q"/>
 			<KeyboardKey val="W"/>
 			<KeyboardKey val="E"/>
@@ -16,7 +16,7 @@ import KeyboardKey from "./KeyboardKey.vue";
 			<KeyboardKey val="O"/>
 			<KeyboardKey val="P"/>
     </div>
-    <div class="flex">
+    <div class="flex ml-6">
 			<KeyboardKey val="A"/>
 			<KeyboardKey val="S"/>
 			<KeyboardKey val="D"/>
@@ -27,7 +27,7 @@ import KeyboardKey from "./KeyboardKey.vue";
 			<KeyboardKey val="K"/>
 			<KeyboardKey val="L"/>
     </div>
-    <div class="flex">
+    <div class="flex justify-between">
 			<KeyboardKey val="ENTER"/>
 			<KeyboardKey val="Z"/>
 			<KeyboardKey val="X"/>
@@ -36,7 +36,7 @@ import KeyboardKey from "./KeyboardKey.vue";
 			<KeyboardKey val="B"/>
 			<KeyboardKey val="N"/>
 			<KeyboardKey val="M"/>
-			<KeyboardKey val="DELETE"/>
+			<KeyboardKey val="DEL"/>
 		</div>
   </div>
 </template>

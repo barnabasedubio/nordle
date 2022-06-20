@@ -24,10 +24,10 @@ function getLetter(index: number) {
 function matchColor(index: number) {
   if (rowNumber < store.enteredWords.length) {
     const color: string = store.matchColors[rowNumber][index];
-    if (color === "green") return "bg-green-300";
-    if (color === "yellow") return "bg-yellow-300";
-    else return "bg-gray-400";
-  } else return "bg-gray-400";
+    if (color === "green") return "bg-nord14";
+    if (color === "yellow") return "bg-nord12";
+    else return "bg-nord3";
+  } else return "bg-nord3";
 }
 </script>
 

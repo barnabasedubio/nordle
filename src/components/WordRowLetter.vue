@@ -8,7 +8,9 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="w-16 h-16 border-solid border-2 border-red-400">
+  <div class="flex justify-center items-center w-16 h-16 m-0.5 text-nord4 text-3xl">
+		<div class="h-8">
 		{{ props.letter }}
+		</div>
   </div>
 </template>
