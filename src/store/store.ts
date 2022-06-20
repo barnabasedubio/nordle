@@ -50,9 +50,19 @@ export const useStore = defineStore("main", {
   },
   actions: {
     checkIfGameOver(): boolean {
+      console.log(this.currentWordAsArray);
+      if (
+        this.currentWordAsArray.join("").toLowerCase() ===
+        this.todaysWordAsArray.join("")
+      ) {
+        this.acceptingInputs = false;
+        alert("Nice");
+		return true;
+      }
       if (this.enteredWords.length === 6) {
         alert("Game Over!");
         this.acceptingInputs = false;
+		return true;
       }
       return false;
     },
