@@ -7,12 +7,16 @@ const props = defineProps({
     type: String,
     required: true,
   },
+	deleteKey: {
+		type: Boolean,
+		requred: false
+	}
 });
 
 function getWidth() {
-  if (props.val === "ENTER" || props.val === "DEL") {
+  if (props.val === "ENTER" || props.deleteKey) {
     return " max-w-18";
-  } else return " w-12";
+  } else return " w-10";
 }
 
 function getColor(): string {
@@ -29,9 +33,9 @@ function getColor(): string {
 }
 
 function sendKey(): void {
-  if (store.acceptingInputs) {
-    store.sendKey(props.val);
-  }
+  if (!store.acceptingInputs) return;
+	if (props.deleteKey) store.sendKey("DEL") 
+  else store.sendKey(props.val);
 }
 </script>
 
@@ -41,8 +45,11 @@ function sendKey(): void {
     class="flex justify-center items-center h-14 p-3 border-solid border-2 cursor-pointer m-0.5"
     :class="getColor() + getWidth()"
   >
-    <div class="h-5 select-none font-medium">
+    <div v-if="!props.deleteKey" class="h-5 select-none font-medium">
       {{ props.val }}
     </div>
+		<div v-else>
+			<img src="../assets/delete-svgrepo-com.svg" width="38" alt="Delete">
+		</div>
   </div>
 </template>

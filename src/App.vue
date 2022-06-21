@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import TheNavBar from "./layout/TheNavBar.vue";
 import TheContainer from "./layout/TheContainer.vue";
+
+document.title = "Nordle";
 </script>
 
 <template>
@@ -11,13 +13,14 @@ import TheContainer from "./layout/TheContainer.vue";
 </template>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Paytone+One&display=swap');
 * {
   border: none;
   margin: 0;
   padding: 0;
 }
 html {
-	background-color: #2e3440
+  background-color: #2e3440;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

@@ -24,7 +24,7 @@ export const useStore = defineStore("main", {
     return {
       validWordList,
       solutionWordList,
-      todaysWord: solutionWordList[369],
+      todaysWord: solutionWordList[371],
       currentWordAsArray: [],
       enteredWords: [],
       matchColors: new Array(6)

@@ -1,9 +1,36 @@
 <template>
   <div class="w-full h-12 bg-nord1">
-    <div class="container mx-auto flex flex-row justify-between items-center h-12">
-      <div class="w-14">Help</div>
-      <div class="w-24">Nordle</div>
-      <div class="w-14">Settings</div>
+    <div
+      class="container mx-auto flex flex-row justify-between items-center h-12"
+    >
+      <div class="flex">
+        <div class="w-14">
+					<img src="../assets/github-svgrepo-com.svg" width="28" alt="GitHub">
+				</div>
+        <div class="w-14">
+          <img src="../assets/help-svgrepo-com.svg" width="30" alt="Help" />
+        </div>
+      </div>
+
+      <div class="w-24 title text-3xl text-nord4">Nordle</div>
+      <div class="flex">
+        <div class="w-14">
+          <img src="../assets/stats-svgrepo-com.svg" width="28" alt="Stats" />
+        </div>
+        <div class="w-14">
+          <img
+            src="../assets/settings-svgrepo-com.svg"
+            width="28"
+            alt="Settings"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.title {
+	font-family: "Paytone One";
+}
+</style>

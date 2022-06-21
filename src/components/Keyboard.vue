@@ -16,7 +16,7 @@ import KeyboardKey from "./KeyboardKey.vue";
 			<KeyboardKey val="O"/>
 			<KeyboardKey val="P"/>
     </div>
-    <div class="flex ml-6">
+    <div class="flex ml-7">
 			<KeyboardKey val="A"/>
 			<KeyboardKey val="S"/>
 			<KeyboardKey val="D"/>
@@ -36,7 +36,7 @@ import KeyboardKey from "./KeyboardKey.vue";
 			<KeyboardKey val="B"/>
 			<KeyboardKey val="N"/>
 			<KeyboardKey val="M"/>
-			<KeyboardKey val="DEL"/>
+			<KeyboardKey :deleteKey="true" val="DEL"/>
 		</div>
   </div>
 </template>
