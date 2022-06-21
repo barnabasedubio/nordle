@@ -16,7 +16,7 @@ import KeyboardKey from "./KeyboardKey.vue";
 			<KeyboardKey val="O"/>
 			<KeyboardKey val="P"/>
     </div>
-    <div class="flex ml-7">
+    <div class="flex ml-8">
 			<KeyboardKey val="A"/>
 			<KeyboardKey val="S"/>
 			<KeyboardKey val="D"/>
