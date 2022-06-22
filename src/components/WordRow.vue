@@ -10,18 +10,19 @@ const props = defineProps({
   },
 });
 
-const rowNumber: number = parseInt(props.row);
+const rowNumber = parseInt(props.row);
 
-function getLetter(index: number) {
+function getLetter(index: number): string {
   if (rowNumber < store.enteredWords.length) {
     return store.enteredWords[rowNumber][index].toUpperCase();
   }
   if (rowNumber === store.enteredWords.length) {
     return store.currentWordAsArray[index] || "";
-  } else return "";
+  } 
+	else return "";
 }
 
-function matchColor(index: number) {
+function matchColor(index: number): string {
   if (rowNumber < store.enteredWords.length) {
     const color: string = store.matchColors[rowNumber][index];
     if (color === "green") return "bg-nord14";
