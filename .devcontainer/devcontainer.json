@@ -1,5 +1,5 @@
 {
-	"name": "makeabugreport-devcontainer",
+	"name": "nordle-devcontainer",
 	"dockerFile": "Dockerfile",
 	"forwardPorts": [ 3000 ],
 	"extensions": [

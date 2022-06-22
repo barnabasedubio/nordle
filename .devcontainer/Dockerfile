@@ -15,11 +15,11 @@ RUN apt update && apt install -y \
 RUN curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash - && \
 	apt update && apt install -y nodejs
 
-# create user makeabugreport
-RUN useradd -m -s /bin/bash makeabugreport && \
-	usermod -a -G sudo makeabugreport && \
-	echo "makeabugreport ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+# create user nordle
+RUN useradd -m -s /bin/bash nordle && \
+	usermod -a -G sudo nordle && \
+	echo "nordle ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 
-USER makeabugreport
-WORKDIR /home/makeabugreport
+USER nordle
+WORKDIR /home/nordle
