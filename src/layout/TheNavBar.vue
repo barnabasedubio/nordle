@@ -5,12 +5,14 @@
     >
       <div class="flex">
         <div class="w-10">
-          <img
-            class="cursor-pointer mx-auto"
-            src="../assets/github-svgrepo-com.svg"
-            width="28"
-            alt="GitHub"
-          />
+          <a href="https://github.com/barnabasedubio/nordle" target="_blank">
+            <img
+              class="cursor-pointer mx-auto"
+              src="../assets/github-svgrepo-com.svg"
+              width="28"
+              alt="GitHub"
+            />
+          </a>
         </div>
         <div class="w-10">
           <img
