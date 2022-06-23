@@ -13,6 +13,7 @@ interface IState {
   lettersConfirmedCorrect: string[];
   lettersConfirmedIncluded: string[];
   lettersConfirmedNotIncluded: string[];
+  hardMode: boolean;
 }
 
 interface IWordMap {
@@ -24,7 +25,7 @@ export const useStore = defineStore("main", {
     return {
       validWordList,
       solutionWordList,
-      todaysWord: solutionWordList[371],
+      todaysWord: solutionWordList[372],
       currentWordAsArray: [],
       enteredWords: [],
       matchColors: new Array(6)
@@ -34,6 +35,7 @@ export const useStore = defineStore("main", {
       lettersConfirmedCorrect: [],
       lettersConfirmedIncluded: [],
       lettersConfirmedNotIncluded: [],
+      hardMode: true,
     };
   },
   getters: {
@@ -50,19 +52,18 @@ export const useStore = defineStore("main", {
   },
   actions: {
     checkIfGameOver(): boolean {
-      console.log(this.currentWordAsArray);
       if (
         this.currentWordAsArray.join("").toLowerCase() ===
         this.todaysWordAsArray.join("")
       ) {
         this.acceptingInputs = false;
         alert("Nice");
-		return true;
+        return true;
       }
       if (this.enteredWords.length === 6) {
-        alert("Game Over!");
         this.acceptingInputs = false;
-		return true;
+        alert("Game Over!");
+        return true;
       }
       return false;
     },
@@ -78,8 +79,35 @@ export const useStore = defineStore("main", {
           this.lettersConfirmedNotIncluded.push(enteredWord[i]);
       }
     },
-    evaluateWord(enteredWord: string[]): void {
+    satisfiesHardMode(enteredWord: string[]): boolean {
+      if (!this.enteredWords.length) return true;
+      const previousMatchColors =
+        this.matchColors[this.enteredWords.length - 1];
+      for (let i = 0; i < 5; i++) {
+        if (
+          previousMatchColors[i] === "green" &&
+          enteredWord[i] !== this.enteredWords[this.enteredWords.length - 1][i]
+        )
+          return false;
+      }
+      for (let i = 0; i < 5; i++) {
+        if (
+          previousMatchColors[i] === "yellow" &&
+          !enteredWord.includes(
+            this.enteredWords[this.enteredWords.length - 1][i]
+          )
+        )
+          return false;
+      }
+      return true;
+    },
+    evaluateWord(enteredWord: string[]): boolean {
       enteredWord = enteredWord.map((letter) => letter.toLowerCase());
+      // if hard mode is activated, make sure entered word satisfies criteria
+      if (this.hardMode && !this.satisfiesHardMode(enteredWord)) {
+        alert("Hard mode!");
+        return false;
+      }
       const wordMap: IWordMap = { ...this.todaysWordAsMap };
       // first look for all perfect matches
       for (let i = 0; i < 5; i++) {
@@ -108,20 +136,22 @@ export const useStore = defineStore("main", {
         this.matchColors[this.enteredWords.length]
       );
       this.enteredWords.push(enteredWord.join(""));
+      return true;
     },
     sendKey(value: string): void {
       if (value === "ENTER") {
         if (this.currentWordAsArray.length < 5) alert("not enough letters");
         else {
           const currentWord: string = this.currentWordAsArray.join("");
-          if (!this.solutionWordList.includes(currentWord.toLowerCase())) {
+          if (!this.validWordList.includes(currentWord.toLowerCase())) {
             alert("not in word list");
             return;
           }
-
-          this.evaluateWord(this.currentWordAsArray);
-          this.checkIfGameOver();
-          this.currentWordAsArray = [];
+          if (this.evaluateWord(this.currentWordAsArray)) {
+            // word was successfully registered as an attempt
+            this.checkIfGameOver();
+            this.currentWordAsArray = [];
+          }
         }
       } else if (value === "DEL") {
         if (!!this.currentWordAsArray.length) {
