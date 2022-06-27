@@ -27,7 +27,7 @@ function matchColor(index: number): string {
     const color: string = store.matchColors[rowNumber][index];
     if (color === "green") return "bg-nord14";
     if (color === "yellow") return "bg-nord12";
-    else return "bg-nord3";
+    else return "bg-nord0 border-solid border-2 border-nord3";
   } else return "bg-nord3";
 }
 </script>
