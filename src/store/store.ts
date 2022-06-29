@@ -14,6 +14,9 @@ interface IState {
   lettersConfirmedIncluded: string[];
   lettersConfirmedNotIncluded: string[];
   hardMode: boolean;
+  darkTheme: boolean;
+  highContrast: boolean;
+  freePlayMode: boolean;
 }
 
 interface IWordMap {
@@ -25,7 +28,7 @@ export const useStore = defineStore("main", {
     return {
       validWordList,
       solutionWordList,
-      todaysWord: solutionWordList[375],
+      todaysWord: solutionWordList[379],
       currentWordAsArray: [],
       enteredWords: [],
       matchColors: new Array(6)
@@ -36,6 +39,9 @@ export const useStore = defineStore("main", {
       lettersConfirmedIncluded: [],
       lettersConfirmedNotIncluded: [],
       hardMode: false,
+      darkTheme: true,
+	  highContrast: false,
+	  freePlayMode: false,
     };
   },
   getters: {

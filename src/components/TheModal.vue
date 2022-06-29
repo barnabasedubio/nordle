@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import ToggleSwitch from "./ToggleSwitch.vue";
+
 const props = defineProps({
   content: {
     type: String,
@@ -62,8 +64,49 @@ function closeModal() {
           mode in the settings.)
         </div>
       </div>
-      <div v-if="props.content === 'stats'">stats</div>
-      <div v-if="props.content === 'settings'">settings</div>
+      <div v-if="props.content === 'stats'" class="text-nord4">
+        <div class="text-center mt-2 mb-2">
+          <h3 class="font-bold">STATISTICS</h3>
+        </div>
+      </div>
+      <div v-if="props.content === 'settings'" class="text-nord4">
+        <div class="text-center mt-2 mb-2">
+          <h3 class="font-bold">SETTINGS</h3>
+        </div>
+        <div class="mt-9 flex justify-between items-center">
+          <div>
+            <h4 class="font-semibold text-sm">Hard Mode</h4>
+            <p class="text-xs">
+              Any revealed hints must be used in subsequent guesses.
+            </p>
+          </div>
+          <ToggleSwitch />
+        </div>
+        <hr class="mt-4" />
+        <div class="mt-4 flex justify-between items-center">
+          <div>
+            <h4 class="font-semibold text-sm">Dark Theme</h4>
+            <p class="text-xs">Easy on your eyes.</p>
+          </div>
+          <ToggleSwitch />
+        </div>
+        <hr class="mt-4" />
+        <div class="mt-4 flex justify-between items-center">
+          <div>
+            <h4 class="font-semibold text-sm">High Contrast Mode</h4>
+            <p class="text-xs">For improved color vision.</p>
+          </div>
+          <ToggleSwitch />
+        </div>
+        <hr class="mt-4" />
+        <div class="mt-4 flex justify-between items-center">
+          <div>
+            <h4 class="font-semibold text-sm">Free Play Mode</h4>
+            <p class="text-xs">Play all past solutions!</p>
+          </div>
+          <ToggleSwitch />
+        </div>
+      </div>
     </div>
   </div>
 </template>
