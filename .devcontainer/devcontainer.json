@@ -8,7 +8,8 @@
 		"ms-azuretools.vscode-docker",
 		"esbenp.prettier-vscode",
 		"formulahendry.auto-rename-tag",
-		"usernamehw.errorlens"
+		"usernamehw.errorlens",
+		"Gruntfuggly.todo-tree"
 	],
 	"shutdownAction": "stopContainer"
 }
