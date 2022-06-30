@@ -21,25 +21,15 @@ function getValue(property: string) {
 let val = getValue(props.property);
 
 function toggleValue(property: string): void {
-  if (property === "hardMode") {
+  if (
+    property === "hardMode" ||
+    property === "darkTheme" ||
+    property === "highContrast" ||
+    property === "freePlayMode"
+  ) {
     val.value = !val.value;
-    store.hardMode = val.value;
-    localStorage.setItem("hardMode", JSON.stringify(val.value));
-  }
-  if (property === "darkTheme") {
-    val.value = !val.value;
-    store.darkTheme = val.value;
-    localStorage.setItem("darkTheme", JSON.stringify(val.value));
-  }
-  if (property === "highContrast") {
-    val.value = !val.value;
-    store.highContrast = val.value;
-    localStorage.setItem("highContrast", JSON.stringify(val.value));
-  }
-  if (property === "freePlayMode") {
-    val.value = !val.value;
-    store.freePlayMode = val.value;
-    localStorage.setItem("freePlayMode", JSON.stringify(val.value));
+    store[property] = val.value;
+    localStorage.setItem(property, JSON.stringify(val.value));
   }
 }
 </script>
