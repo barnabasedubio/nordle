@@ -2,6 +2,25 @@ import { defineStore } from "pinia";
 import validWordList from "../data/validWordList.json";
 import solutionWordList from "../data/solutionWordList.json";
 
+//TODO: export interfaces to new file
+
+interface IWordMap {
+  [letter: string]: number;
+}
+
+interface IGuessDistribution {
+  [num: string]: number;
+}
+
+interface IGameStats {
+  played: number;
+  wins: number;
+  losses: number;
+  currentStreak: number;
+  maxStreak: number;
+  guessDistribution: IGuessDistribution;
+}
+
 interface IState {
   validWordList: string[];
   solutionWordList: string[];
@@ -17,10 +36,7 @@ interface IState {
   darkTheme: boolean;
   highContrast: boolean;
   freePlayMode: boolean;
-}
-
-interface IWordMap {
-  [letter: string]: number;
+  gameStats: IGameStats;
 }
 
 export const useStore = defineStore("main", {
@@ -64,6 +80,23 @@ export const useStore = defineStore("main", {
       freePlayMode: localStorage.getItem("freePlayMode")
         ? JSON.parse(localStorage.getItem("freePlayMode")!)
         : false,
+      gameStats: localStorage.getItem("gameStats")
+        ? JSON.parse(localStorage.getItem("gameStats")!)
+        : ({
+            played: 0,
+            wins: 0,
+            losses: 0,
+            currentStreak: 0, //TODO: currentStreak should also reset when user leaves out a day
+            maxStreak: 0,
+            guessDistribution: {
+              one: 0,
+              two: 0,
+              three: 0,
+              four: 0,
+              five: 0,
+              six: 0,
+            } as IGuessDistribution,
+          } as IGameStats),
     };
   },
   getters: {
@@ -77,6 +110,15 @@ export const useStore = defineStore("main", {
       }
       return wordMap;
     },
+    numberOfEnteredWords(state): string {
+      if (state.enteredWords.length === 1) return "one";
+      if (state.enteredWords.length === 2) return "two";
+      if (state.enteredWords.length === 3) return "three";
+      if (state.enteredWords.length === 4) return "four";
+      if (state.enteredWords.length === 5) return "five";
+      if (state.enteredWords.length === 6) return "six";
+      return "";
+    },
   },
   actions: {
     checkIfGameOver(): boolean {
@@ -87,6 +129,16 @@ export const useStore = defineStore("main", {
         this.acceptingInputs = false;
         localStorage.setItem("acceptingInputs", "false");
         alert("Nice");
+        this.gameStats.played++;
+        this.gameStats.wins++;
+        this.gameStats.currentStreak++;
+        this.gameStats.maxStreak =
+          this.gameStats.currentStreak > this.gameStats.maxStreak
+            ? this.gameStats.currentStreak
+            : this.gameStats.maxStreak;
+        this.gameStats.guessDistribution[this.numberOfEnteredWords]++;
+		localStorage.setItem("gameStats", JSON.stringify(this.gameStats))
+		console.log(this.gameStats)
         return true;
       }
       if (this.enteredWords.length === 6) {
