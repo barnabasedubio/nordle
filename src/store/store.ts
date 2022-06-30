@@ -28,20 +28,42 @@ export const useStore = defineStore("main", {
     return {
       validWordList,
       solutionWordList,
-      todaysWord: solutionWordList[379],
-      currentWordAsArray: [],
-      enteredWords: [],
-      matchColors: new Array(6)
-        .fill(undefined)
-        .map((x) => new Array(5).fill(" ")),
-      acceptingInputs: true,
-      lettersConfirmedCorrect: [],
-      lettersConfirmedIncluded: [],
-      lettersConfirmedNotIncluded: [],
-      hardMode: false,
-      darkTheme: true,
-	  highContrast: false,
-	  freePlayMode: false,
+      todaysWord: solutionWordList[380],
+      currentWordAsArray: localStorage.getItem("currentWordAsArray")
+        ? JSON.parse(localStorage.getItem("currentWordAsArray")!)
+        : [],
+      enteredWords: localStorage.getItem("enteredWords")
+        ? JSON.parse(localStorage.getItem("enteredWords")!)
+        : [],
+      matchColors: localStorage.getItem("matchColors")
+        ? JSON.parse(localStorage.getItem("matchColors")!)
+        : new Array(6).fill(undefined).map((x) => new Array(5).fill(" ")),
+      acceptingInputs: localStorage.getItem("acceptingInputs")
+        ? JSON.parse(localStorage.getItem("acceptingInputs")!)
+        : true,
+      lettersConfirmedCorrect: localStorage.getItem("lettersConfirmedCorrect")
+        ? JSON.parse(localStorage.getItem("lettersConfirmedCorrect")!)
+        : [],
+      lettersConfirmedIncluded: localStorage.getItem("lettersConfirmedIncluded")
+        ? JSON.parse(localStorage.getItem("lettersConfirmedIncluded")!)
+        : [],
+      lettersConfirmedNotIncluded: localStorage.getItem(
+        "lettersConfirmedNotIncluded"
+      )
+        ? JSON.parse(localStorage.getItem("lettersConfirmedNotIncluded")!)
+        : [],
+      hardMode: localStorage.getItem("hardMode")
+        ? JSON.parse(localStorage.getItem("hardMode")!)
+        : false,
+      darkTheme: localStorage.getItem("darkTheme")
+        ? JSON.parse(localStorage.getItem("darkTheme")!)
+        : true,
+      highContrast: localStorage.getItem("highContrast")
+        ? JSON.parse(localStorage.getItem("highContrast")!)
+        : false,
+      freePlayMode: localStorage.getItem("freePlayMode")
+        ? JSON.parse(localStorage.getItem("freePlayMode")!)
+        : false,
     };
   },
   getters: {
@@ -63,11 +85,13 @@ export const useStore = defineStore("main", {
         this.todaysWordAsArray.join("")
       ) {
         this.acceptingInputs = false;
+        localStorage.setItem("acceptingInputs", "false");
         alert("Nice");
         return true;
       }
       if (this.enteredWords.length === 6) {
         this.acceptingInputs = false;
+        localStorage.setItem("acceptingInputs", "false");
         alert("Game Over!");
         return true;
       }
@@ -77,12 +101,27 @@ export const useStore = defineStore("main", {
       // look at the current entered word and the current color match
       // based on that info update the lists of letters chosen
       for (let i = 0; i < enteredWord.length; i++) {
-        if (matchColor[i] === "green")
+        if (matchColor[i] === "green") {
           this.lettersConfirmedCorrect.push(enteredWord[i]);
-        if (matchColor[i] === "yellow")
+          localStorage.setItem(
+            "lettersConfirmedCorrect",
+            JSON.stringify(this.lettersConfirmedCorrect)
+          );
+        }
+        if (matchColor[i] === "yellow") {
           this.lettersConfirmedIncluded.push(enteredWord[i]);
-        if (matchColor[i] === "gray")
+          localStorage.setItem(
+            "lettersConfirmedIncluded",
+            JSON.stringify(this.lettersConfirmedIncluded)
+          );
+        }
+        if (matchColor[i] === "gray") {
           this.lettersConfirmedNotIncluded.push(enteredWord[i]);
+          localStorage.setItem(
+            "lettersConfirmedNotIncluded",
+            JSON.stringify(this.lettersConfirmedNotIncluded)
+          );
+        }
       }
     },
     satisfiesHardMode(enteredWord: string[]): boolean {
@@ -120,6 +159,7 @@ export const useStore = defineStore("main", {
         if (enteredWord[i] === this.todaysWord[i]) {
           wordMap[enteredWord[i]]--;
           this.matchColors[this.enteredWords.length][i] = "green";
+          localStorage.setItem("matchColors", JSON.stringify(this.matchColors));
         }
       }
       for (let i = 0; i < 5; i++) {
@@ -131,9 +171,11 @@ export const useStore = defineStore("main", {
           wordMap[enteredWord[i]] === 0
         ) {
           this.matchColors[this.enteredWords.length][i] = "gray";
+          localStorage.setItem("matchColors", JSON.stringify(this.matchColors));
         } else {
           // letters that exist in the word somewhere
           this.matchColors[this.enteredWords.length][i] = "yellow";
+          localStorage.setItem("matchColors", JSON.stringify(this.matchColors));
           wordMap[enteredWord[i]]--;
         }
       }
@@ -142,13 +184,14 @@ export const useStore = defineStore("main", {
         this.matchColors[this.enteredWords.length]
       );
       this.enteredWords.push(enteredWord.join(""));
+      localStorage.setItem("enteredWords", JSON.stringify(this.enteredWords));
       return true;
     },
     sendKey(value: string): void {
       if (value === "ENTER") {
         if (this.currentWordAsArray.length < 5) alert("not enough letters");
         else {
-          const currentWord: string = this.currentWordAsArray.join("");
+          const currentWord = this.currentWordAsArray.join("");
           if (!this.validWordList.includes(currentWord.toLowerCase())) {
             alert("not in word list");
             return;
@@ -157,16 +200,28 @@ export const useStore = defineStore("main", {
             // word was successfully registered as an attempt
             this.checkIfGameOver();
             this.currentWordAsArray = [];
+            localStorage.setItem(
+              "currentWordAsArray",
+              JSON.stringify(this.currentWordAsArray)
+            );
           }
         }
       } else if (value === "DEL") {
         if (!!this.currentWordAsArray.length) {
           this.currentWordAsArray.pop();
+          localStorage.setItem(
+            "currentWordAsArray",
+            JSON.stringify(this.currentWordAsArray)
+          );
         }
       } else {
         // user typed in a valid letter
         if (this.currentWordAsArray.length === 5) return;
         this.currentWordAsArray.push(value);
+        localStorage.setItem(
+          "currentWordAsArray",
+          JSON.stringify(this.currentWordAsArray)
+        );
       }
     },
   },

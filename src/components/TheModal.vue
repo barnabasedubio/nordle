@@ -80,7 +80,7 @@ function closeModal() {
               Any revealed hints must be used in subsequent guesses.
             </p>
           </div>
-          <ToggleSwitch />
+          <ToggleSwitch property="hardMode" />
         </div>
         <hr class="mt-4" />
         <div class="mt-4 flex justify-between items-center">
@@ -88,7 +88,7 @@ function closeModal() {
             <h4 class="font-semibold text-sm">Dark Theme</h4>
             <p class="text-xs">Easy on your eyes.</p>
           </div>
-          <ToggleSwitch />
+          <ToggleSwitch property="darkTheme"/>
         </div>
         <hr class="mt-4" />
         <div class="mt-4 flex justify-between items-center">
@@ -96,7 +96,7 @@ function closeModal() {
             <h4 class="font-semibold text-sm">High Contrast Mode</h4>
             <p class="text-xs">For improved color vision.</p>
           </div>
-          <ToggleSwitch />
+          <ToggleSwitch property="highContrast"/>
         </div>
         <hr class="mt-4" />
         <div class="mt-4 flex justify-between items-center">
@@ -104,7 +104,7 @@ function closeModal() {
             <h4 class="font-semibold text-sm">Free Play Mode</h4>
             <p class="text-xs">Play all past solutions!</p>
           </div>
-          <ToggleSwitch />
+          <ToggleSwitch property="freePlayMode"/>
         </div>
       </div>
     </div>

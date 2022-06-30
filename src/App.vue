@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TheNavBar from "./layout/TheNavBar.vue";
 import TheContainer from "./layout/TheContainer.vue";
-import { useStore } from "./store/store.js";
+import { useStore } from "./store/store";
 
 document.title = "Nordle";
 const store = useStore();
