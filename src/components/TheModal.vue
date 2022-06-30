@@ -24,6 +24,9 @@ function closeModal() {
     <div
       class="modal p-2 text-left relative z-50 w-96 h-96 mt-24 mx-auto border-solid border-2 border-nord4 bg-nord2"
     >
+		<div @click="closeModal" class="absolute right-4 top-3.5 cursor-pointer">
+		<img src="../assets/close-svgrepo-com.svg" alt="Close modal">
+		</div>
       <div v-if="props.content === 'help'" class="text-nord4">
         <div class="text-center mt-2 mb-2">
           <h3 class="font-bold">HOW TO PLAY</h3>
