@@ -44,7 +44,7 @@ export const useStore = defineStore("main", {
     return {
       validWordList,
       solutionWordList,
-      todaysWord: solutionWordList[380],
+      todaysWord: solutionWordList[385],
       currentWordAsArray: localStorage.getItem("currentWordAsArray")
         ? JSON.parse(localStorage.getItem("currentWordAsArray")!)
         : [],
@@ -119,6 +119,10 @@ export const useStore = defineStore("main", {
       if (state.enteredWords.length === 6) return "six";
       return "";
     },
+    winPercentage: (state): number =>
+      state.gameStats.played
+        ? (state.gameStats.wins / state.gameStats.played) * 100
+        : 0,
   },
   actions: {
     checkIfGameOver(): boolean {
@@ -137,8 +141,7 @@ export const useStore = defineStore("main", {
             ? this.gameStats.currentStreak
             : this.gameStats.maxStreak;
         this.gameStats.guessDistribution[this.numberOfEnteredWords]++;
-		localStorage.setItem("gameStats", JSON.stringify(this.gameStats))
-		console.log(this.gameStats)
+        localStorage.setItem("gameStats", JSON.stringify(this.gameStats));
         return true;
       }
       if (this.enteredWords.length === 6) {
