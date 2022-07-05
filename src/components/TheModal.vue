@@ -13,6 +13,12 @@ const props = defineProps({
 const store = useStore();
 let interval: NodeJS.Timer;
 let remainingTime = ref("");
+let oneGuessPercentage = ref(0);
+let twoGuessesPercentage = ref(0);
+let threeGuessesPercentage = ref(0);
+let fourGuessesPercentage = ref(0);
+let fiveGuessesPercentage = ref(0);
+let sixGuessesPercentage = ref(0);
 
 const emit = defineEmits(["close-modal"]);
 
@@ -47,6 +53,11 @@ function getCountDown(): string {
   let formattedTime = `${hours}:${minutes}:${seconds}`;
   return formattedTime;
 }
+
+function getMostRecentGuess(num: number): boolean {
+  return store.gameStats.mostRecentGuessAmount === num;
+}
+
 onMounted(() => {
   if (props.content === "stats") {
     remainingTime.value = getCountDown(); // initial value without the setInterval delay
@@ -54,8 +65,17 @@ onMounted(() => {
       remainingTime.value = getCountDown();
     }, 1000);
 
-		// calculate the relation of past guesses in order to set the guess distribution bar chart
-
+    // calculate the relation of past guesses in order to set the guess distribution bar chart
+    let array = Object.values(store.gameStats.guessDistribution);
+    let mostGuessesAmount = Math.max(...array);
+    let distribution = store.gameStats.guessDistribution;
+    oneGuessPercentage.value = (distribution.one / mostGuessesAmount) * 100;
+    twoGuessesPercentage.value = (distribution.two / mostGuessesAmount) * 100;
+    threeGuessesPercentage.value =
+      (distribution.three / mostGuessesAmount) * 100;
+    fourGuessesPercentage.value = (distribution.four / mostGuessesAmount) * 100;
+    fiveGuessesPercentage.value = (distribution.five / mostGuessesAmount) * 100;
+    sixGuessesPercentage.value = (distribution.six / mostGuessesAmount) * 100;
   }
 });
 </script>
@@ -136,39 +156,81 @@ onMounted(() => {
         </div>
         <div class="mt-3 h-44">
           <h3 class="font-bold text-center">GUESS DISTRIBUTION</h3>
-          <div class="h-6 flex mb-0.5">
+          <div class="h-6 flex mb-0.5 px-2">
             <p class="h-full py-px">1</p>
-            <div class="h-full ml-1 py-px px-2 bg-nord0">
+            <div
+              :style="{ width: oneGuessPercentage + '%' }"
+              :class="{
+                'bg-nord14': getMostRecentGuess(1),
+                'bg-nord0': !getMostRecentGuess(1),
+              }"
+              class="h-full min-w-[6.7%] ml-1 py-px px-2 text-right"
+            >
               <p>{{ store.gameStats.guessDistribution.one }}</p>
             </div>
           </div>
-          <div class="h-6 flex mb-0.5">
+          <div class="h-6 flex mb-0.5 px-2">
             <p class="h-full py-px">2</p>
-            <div class="h-full ml-1 py-px px-2 bg-nord0">
+            <div
+              :style="{ width: twoGuessesPercentage + '%' }"
+              :class="{
+                'bg-nord14': getMostRecentGuess(2),
+                'bg-nord0': !getMostRecentGuess(2),
+              }"
+              class="h-full min-w-[6.7%] ml-1 py-px px-2 text-right"
+            >
               <p>{{ store.gameStats.guessDistribution.two }}</p>
             </div>
           </div>
-          <div class="h-6 flex mb-0.5">
+          <div class="h-6 flex mb-0.5 px-2">
             <p class="h-full py-px">3</p>
-            <div class="h-full ml-1 py-px px-2 bg-nord0">
+            <div
+              :style="{ width: threeGuessesPercentage + '%' }"
+              :class="{
+                'bg-nord14': getMostRecentGuess(3),
+                'bg-nord0': !getMostRecentGuess(3),
+              }"
+              class="h-full min-w-[6.7%] ml-1 py-px px-2 text-right"
+            >
               <p>{{ store.gameStats.guessDistribution.three }}</p>
             </div>
           </div>
-          <div class="h-6 flex mb-0.5">
+          <div class="h-6 flex mb-0.5 px-2">
             <p class="h-full py-px">4</p>
-            <div class="h-full ml-1 py-px px-2 bg-nord0">
+            <div
+              :style="{ width: fourGuessesPercentage + '%' }"
+              :class="{
+                'bg-nord14': getMostRecentGuess(4),
+                'bg-nord0': !getMostRecentGuess(4),
+              }"
+              class="h-full min-w-[6.7%] ml-1 py-px px-2 text-right"
+            >
               <p>{{ store.gameStats.guessDistribution.four }}</p>
             </div>
           </div>
-          <div class="h-6 flex mb-0.5">
+          <div class="h-6 flex mb-0.5 px-2">
             <p class="h-full py-px">5</p>
-            <div class="h-full ml-1 py-px px-2 bg-nord0">
+            <div
+              :style="{ width: fiveGuessesPercentage + '%' }"
+              :class="{
+                'bg-nord14': getMostRecentGuess(5),
+                'bg-nord0': !getMostRecentGuess(5),
+              }"
+              class="h-full min-w-[6.7%] ml-1 py-px px-2 text-right"
+            >
               <p>{{ store.gameStats.guessDistribution.five }}</p>
             </div>
           </div>
-          <div class="h-6 flex mb-0.5">
+          <div class="h-6 flex mb-0.5 px-2">
             <p class="h-full py-px">6</p>
-            <div class="h-full ml-1 py-px px-2 bg-nord0">
+            <div
+              :style="{ width: sixGuessesPercentage + '%' }"
+              :class="{
+                'bg-nord14': getMostRecentGuess(6),
+                'bg-nord0': !getMostRecentGuess(6),
+              }"
+              class="h-full min-w-[6.7%] ml-1 py-px px-2 text-right"
+            >
               <p>{{ store.gameStats.guessDistribution.six }}</p>
             </div>
           </div>
