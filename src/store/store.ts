@@ -19,6 +19,7 @@ interface IGameStats {
   currentStreak: number;
   maxStreak: number;
   guessDistribution: IGuessDistribution;
+  mostRecentGuessAmount: number; // needed to highlight correct bar in the guess distribution bar chart
 }
 
 interface IState {
@@ -90,12 +91,13 @@ export const useStore = defineStore("main", {
             maxStreak: 0,
             guessDistribution: {
               one: 0,
-              two: 0,
-              three: 0,
-              four: 0,
-              five: 0,
-              six: 0,
+              two: 1,
+              three: 2,
+              four: 3,
+              five: 8,
+              six: 6,
             } as IGuessDistribution,
+            mostRecentGuessAmount: 5,
           } as IGameStats),
     };
   },
