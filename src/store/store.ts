@@ -1,51 +1,22 @@
 import { defineStore } from "pinia";
 import validWordList from "../data/validWordList.json";
 import solutionWordList from "../data/solutionWordList.json";
-
-//TODO: export interfaces to new file
-
-interface IWordMap {
-  [letter: string]: number;
-}
-
-interface IGuessDistribution {
-  [num: string]: number;
-}
-
-interface IGameStats {
-  played: number;
-  wins: number;
-  losses: number;
-  currentStreak: number;
-  maxStreak: number;
-  guessDistribution: IGuessDistribution;
-  mostRecentGuessAmount: number; // needed to highlight correct bar in the guess distribution bar chart
-}
-
-interface IState {
-  validWordList: string[];
-  solutionWordList: string[];
-  todaysWord: string;
-  currentWordAsArray: string[];
-  enteredWords: string[];
-  matchColors: string[][];
-  acceptingInputs: boolean;
-  lettersConfirmedCorrect: string[];
-  lettersConfirmedIncluded: string[];
-  lettersConfirmedNotIncluded: string[];
-  hardMode: boolean;
-  darkTheme: boolean;
-  highContrast: boolean;
-  freePlayMode: boolean;
-  gameStats: IGameStats;
-}
+import {
+  IWordMap,
+  IGuessDistribution,
+  IGameStats,
+  IState,
+} from "../interfaces";
 
 export const useStore = defineStore("main", {
   state: (): IState => {
     return {
       validWordList,
       solutionWordList,
-      todaysWord: solutionWordList[385],
+      //solutionWordListIndex: 280,
+      solutionWordListIndex: localStorage.getItem("solutionWordListIndex")
+        ? JSON.parse(localStorage.getItem("solutionWordListIndex")!)
+        : 80,
       currentWordAsArray: localStorage.getItem("currentWordAsArray")
         ? JSON.parse(localStorage.getItem("currentWordAsArray")!)
         : [],
@@ -87,25 +58,36 @@ export const useStore = defineStore("main", {
             played: 0,
             wins: 0,
             losses: 0,
-            currentStreak: 0, //TODO: currentStreak should also reset when user leaves out a day
+            currentStreak: 0,
             maxStreak: 0,
             guessDistribution: {
               one: 0,
-              two: 1,
-              three: 2,
-              four: 3,
-              five: 8,
-              six: 6,
+              two: 0,
+              three: 0,
+              four: 0,
+              five: 0,
+              six: 0,
             } as IGuessDistribution,
-            mostRecentGuessAmount: 5,
+            mostRecentGuessAmount: 0,
           } as IGameStats),
+      isGameOver: localStorage.getItem("isGameOver")
+        ? JSON.parse(localStorage.getItem("isGameOver")!)
+        : false,
+      timeUntilReset: 0, // placeholder, actual value is updated in app.vue
     };
   },
   getters: {
-    todaysWordAsArray: (state): string[] => state.todaysWord.split(""),
-    todaysWordAsMap(state): IWordMap {
+    todaysWord: (state): string =>
+      state.solutionWordList[state.solutionWordListIndex],
+    todaysWordAsArray(): string[] {
+      if (this.todaysWord) {
+        return this.todaysWord.split("");
+      }
+      return [];
+    },
+    todaysWordAsMap(): IWordMap {
       const wordMap: IWordMap = {};
-      for (const letter of state.todaysWord) {
+      for (const letter of this.todaysWord) {
         wordMap[letter] = this.todaysWordAsArray.filter(
           (x) => x === letter
         ).length;
@@ -121,20 +103,55 @@ export const useStore = defineStore("main", {
       if (state.enteredWords.length === 6) return "six";
       return "";
     },
-    winPercentage: (state): number =>
-      state.gameStats.played
-        ? (state.gameStats.wins / state.gameStats.played) * 100
-        : 0,
+    winPercentage(state): number {
+      if (!state.gameStats.played) return 0;
+      else {
+        let decimal = state.gameStats.wins / state.gameStats.played;
+        let value = +(Math.round(+(decimal + "e+2")) + "e-2") * 100;
+        return value;
+      }
+    },
   },
   actions: {
+    resetInputs(): void {
+      // if user didnt submit the correct word in the day, reset current streak
+      if (!this.enteredWords.length) this.gameStats.currentStreak = 0;
+      else if (
+        this.enteredWords[this.enteredWords.length - 1] !== this.todaysWord
+      )
+        this.gameStats.currentStreak = 0;
+
+      localStorage.setItem("isGameOver", "false");
+      this.solutionWordListIndex =
+        ++this.solutionWordListIndex % this.solutionWordList.length; // wrap around when reached the end
+      localStorage.setItem(
+        "solutionWordListIndex",
+        JSON.stringify(this.solutionWordListIndex)
+      );
+      localStorage.setItem("currentWordAsArray", JSON.stringify([]));
+      localStorage.setItem("enteredWords", JSON.stringify([]));
+      localStorage.setItem(
+        "matchColors",
+        JSON.stringify(
+          new Array(6).fill(undefined).map((x) => new Array(5).fill(" "))
+        )
+      );
+      localStorage.setItem("acceptingInputs", "true");
+      localStorage.setItem("lettersConfirmedCorrect", JSON.stringify([]));
+      localStorage.setItem("lettersConfirmedIncluded", JSON.stringify([]));
+      localStorage.setItem("lettersConfirmedNotIncluded", JSON.stringify([]));
+      this.gameStats.mostRecentGuessAmount = 0;
+      localStorage.setItem("gameStats", JSON.stringify(this.gameStats));
+    },
     checkIfGameOver(): boolean {
       if (
-        this.currentWordAsArray.join("").toLowerCase() ===
-        this.todaysWordAsArray.join("")
+        this.enteredWords[this.enteredWords.length - 1].toLowerCase() ===
+        this.todaysWord
       ) {
         this.acceptingInputs = false;
         localStorage.setItem("acceptingInputs", "false");
         alert("Nice");
+        this.isGameOver = true;
         this.gameStats.played++;
         this.gameStats.wins++;
         this.gameStats.currentStreak++;
@@ -143,13 +160,20 @@ export const useStore = defineStore("main", {
             ? this.gameStats.currentStreak
             : this.gameStats.maxStreak;
         this.gameStats.guessDistribution[this.numberOfEnteredWords]++;
+        this.gameStats.mostRecentGuessAmount = this.enteredWords.length;
         localStorage.setItem("gameStats", JSON.stringify(this.gameStats));
+        localStorage.setItem("isGameOver", JSON.stringify(this.isGameOver));
         return true;
       }
       if (this.enteredWords.length === 6) {
+        this.isGameOver = true;
+        this.gameStats.played++;
+        this.gameStats.currentStreak = 0;
         this.acceptingInputs = false;
+        localStorage.setItem("gameStats", JSON.stringify(this.gameStats));
         localStorage.setItem("acceptingInputs", "false");
-        alert("Game Over!");
+        localStorage.setItem("isGameOver", JSON.stringify(this.isGameOver));
+        alert("Game Over! The word was: " + this.todaysWord);
         return true;
       }
       return false;
