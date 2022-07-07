@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onMounted } from "vue";
 import TheNavBar from "./layout/TheNavBar.vue";
 import TheContainer from "./layout/TheContainer.vue";
 import { useStore } from "./store/store";
@@ -39,6 +40,31 @@ window.addEventListener("keydown", (e) => {
   if (e.key === "Backspace") store.sendKey("DEL");
   else if (e.key === "Enter") store.sendKey("ENTER");
   else if (validKeys.includes(e.key)) store.sendKey(e.key.toUpperCase());
+});
+// countdown until next day
+function getRemainingTime(): number {
+  let date = new Date();
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let seconds = date.getSeconds();
+  let timeUntilReset = 24 * 3600 - hours * 3600 - minutes * 60 - seconds - 2;
+  return timeUntilReset;
+}
+
+onMounted(() => {
+  let remainingTime = 60;
+  store.timeUntilReset = remainingTime;
+  console.log(store.todaysWord);
+  setInterval(() => {
+    remainingTime--;
+    if (remainingTime < 0) remainingTime = 60;
+    store.timeUntilReset = remainingTime;
+    //console.log(store.timeUntilReset);
+    if (store.timeUntilReset === 0) {
+      store.resetInputs();
+      window.location.reload();
+    }
+  }, 1000);
 });
 </script>
 
