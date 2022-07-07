@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useStore } from "../store/store";
 import ToggleSwitch from "./ToggleSwitch.vue";
 
@@ -29,23 +29,23 @@ function closeModal() {
   }
 }
 
-function getCountDown(): string {
-  let date = new Date();
-  let hours: number | string = date.getHours();
-  let minutes: number | string = date.getMinutes();
-  let seconds: number | string = date.getSeconds();
+// if the app currently accepts inputs, deacivate while modal is active
+if (store.acceptingInputs) store.acceptingInputs = false;
+onUnmounted(() => {
+  if (!store.isGameOver) store.acceptingInputs = true;
+});
 
-  let timeUntilReset = 24 * 3600 - hours * 3600 - minutes * 60 - seconds - 1;
-  date = new Date(timeUntilReset * 1000);
-  hours =
+function getCountDown(): string {
+  let date = new Date(store.timeUntilReset * 1000);
+  let hours =
     date.getHours() < 10
-      ? "0" + date.getHours().toString()
+      ? "0" + date.getUTCHours().toString()
       : date.getHours().toString();
-  minutes =
+  let minutes =
     date.getMinutes() < 10
-      ? "0" + date.getMinutes().toString()
+      ? "0" + date.getUTCMinutes().toString()
       : date.getMinutes().toString();
-  seconds =
+  let seconds =
     date.getSeconds() < 10
       ? "0" + date.getSeconds().toString()
       : date.getSeconds().toString();
@@ -69,6 +69,8 @@ onMounted(() => {
     let array = Object.values(store.gameStats.guessDistribution);
     let mostGuessesAmount = Math.max(...array);
     let distribution = store.gameStats.guessDistribution;
+
+		//TODO: replace below with computed values
     oneGuessPercentage.value = (distribution.one / mostGuessesAmount) * 100;
     twoGuessesPercentage.value = (distribution.two / mostGuessesAmount) * 100;
     threeGuessesPercentage.value =
@@ -290,7 +292,7 @@ onMounted(() => {
           <ToggleSwitch property="freePlayMode" />
         </div>
         <p class="text-xs mt-1">
-          (Your preformance in Free Play Mode does not affect your statistics.)
+          (Your performance in Free Play Mode does not affect your statistics.)
         </p>
       </div>
     </div>
