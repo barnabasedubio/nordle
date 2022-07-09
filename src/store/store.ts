@@ -7,16 +7,13 @@ import {
   IGameStats,
   IState,
 } from "../interfaces";
-
+// TODO make the game know what the current word should be even when deleting localstorage
 export const useStore = defineStore("main", {
   state: (): IState => {
     return {
       validWordList,
       solutionWordList,
-      //solutionWordListIndex: 280,
-      solutionWordListIndex: localStorage.getItem("solutionWordListIndex")
-        ? JSON.parse(localStorage.getItem("solutionWordListIndex")!)
-        : 80,
+      solutionWordListIndex: 0,
       currentWordAsArray: localStorage.getItem("currentWordAsArray")
         ? JSON.parse(localStorage.getItem("currentWordAsArray")!)
         : [],
@@ -115,11 +112,12 @@ export const useStore = defineStore("main", {
   actions: {
     resetInputs(): void {
       // if user didnt submit the correct word in the day, reset current streak
-      if (!this.enteredWords.length) this.gameStats.currentStreak = 0;
-      else if (
+      if (
+        !this.enteredWords.length ||
         this.enteredWords[this.enteredWords.length - 1] !== this.todaysWord
-      )
+      ) {
         this.gameStats.currentStreak = 0;
+      }
 
       localStorage.setItem("isGameOver", "false");
       this.solutionWordListIndex =
