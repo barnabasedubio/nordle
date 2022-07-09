@@ -38,13 +38,13 @@ onUnmounted(() => {
 function getCountDown(): string {
   let date = new Date(store.timeUntilReset * 1000);
   let hours =
-    date.getHours() < 10
+    date.getUTCHours() < 10
       ? "0" + date.getUTCHours().toString()
-      : date.getHours().toString();
+      : date.getUTCHours().toString();
   let minutes =
-    date.getMinutes() < 10
+    date.getUTCMinutes() < 10
       ? "0" + date.getUTCMinutes().toString()
-      : date.getMinutes().toString();
+      : date.getUTCMinutes().toString();
   let seconds =
     date.getSeconds() < 10
       ? "0" + date.getSeconds().toString()
@@ -70,7 +70,6 @@ onMounted(() => {
     let mostGuessesAmount = Math.max(...array);
     let distribution = store.gameStats.guessDistribution;
 
-		//TODO: replace below with computed values
     oneGuessPercentage.value = (distribution.one / mostGuessesAmount) * 100;
     twoGuessesPercentage.value = (distribution.two / mostGuessesAmount) * 100;
     threeGuessesPercentage.value =
