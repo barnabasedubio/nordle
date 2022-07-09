@@ -43,26 +43,35 @@ window.addEventListener("keydown", (e) => {
 });
 // countdown until next day
 function getRemainingTime(): number {
-  let date = new Date();
-  let hours = date.getHours();
-  let minutes = date.getMinutes();
-  let seconds = date.getSeconds();
-  let timeUntilReset = 24 * 3600 - hours * 3600 - minutes * 60 - seconds - 2;
+  const date = new Date();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+  const timeUntilReset = 24 * 3600 - hours * 3600 - minutes * 60 - seconds - 2;
   return timeUntilReset;
 }
 
+function dateOffset(date1: Date, date2: Date) {
+  const MS_PER_DAY = 1000 * 60 * 60 * 24;
+  const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+  const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+  return Math.floor((utc2 - utc1) / MS_PER_DAY);
+}
+
 onMounted(() => {
-  let remainingTime = 60;
-  store.timeUntilReset = remainingTime;
+  const d1 = new Date(1624101377000);
+  const d2 = new Date(Date.now());
+  const currentIndex = dateOffset(d1, d2);
+  store.solutionWordListIndex = currentIndex - 1;
+
+  store.timeUntilReset = getRemainingTime();
   console.log(store.todaysWord);
   setInterval(() => {
-    remainingTime--;
-    if (remainingTime < 0) remainingTime = 60;
-    store.timeUntilReset = remainingTime;
-    //console.log(store.timeUntilReset);
+    store.timeUntilReset = getRemainingTime();
     if (store.timeUntilReset === 0) {
       store.resetInputs();
-      window.location.reload();
+      // refreshing too soon might result in not updating the word
+      setTimeout(() => window.location.reload(), 1000);
     }
   }, 1000);
 });
