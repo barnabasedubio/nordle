@@ -14,6 +14,7 @@ export const useStore = defineStore("main", {
       validWordList,
       solutionWordList,
       solutionWordListIndex: 0,
+      currentDateId: "",
       currentWordAsArray: localStorage.getItem("currentWordAsArray")
         ? JSON.parse(localStorage.getItem("currentWordAsArray")!)
         : [],
@@ -110,6 +111,26 @@ export const useStore = defineStore("main", {
     },
   },
   actions: {
+    getDateOffset(date1: Date, date2: Date): number {
+      const MS_PER_DAY = 1000 * 60 * 60 * 24;
+      const utc1 = Date.UTC(
+        date1.getFullYear(),
+        date1.getMonth(),
+        date1.getDate()
+      );
+      const utc2 = Date.UTC(
+        date2.getFullYear(),
+        date2.getMonth(),
+        date2.getDate()
+      );
+      return Math.floor((utc2 - utc1) / MS_PER_DAY);
+    },
+    getSolutionWordIndex(): number {
+      const d1 = new Date(1624101377000); //  date where original wordle began
+      const d2 = new Date(Date.now());
+      const currentIndex = this.getDateOffset(d1, d2);
+      return currentIndex - 1;
+    },
     resetInputs(): void {
       // if user didnt submit the correct word in the day, reset current streak
       if (
@@ -119,25 +140,43 @@ export const useStore = defineStore("main", {
         this.gameStats.currentStreak = 0;
       }
 
+      this.isGameOver = false;
       localStorage.setItem("isGameOver", "false");
-      this.solutionWordListIndex =
-        ++this.solutionWordListIndex % this.solutionWordList.length; // wrap around when reached the end
-      localStorage.setItem(
-        "solutionWordListIndex",
-        JSON.stringify(this.solutionWordListIndex)
-      );
+
+      this.solutionWordListIndex = this.getSolutionWordIndex();
+      //localStorage.setItem(
+      //  "solutionWordListIndex",
+      // JSON.stringify(this.solutionWordListIndex)
+      //);
+
+      this.currentWordAsArray = [];
       localStorage.setItem("currentWordAsArray", JSON.stringify([]));
+
+      this.enteredWords = [];
       localStorage.setItem("enteredWords", JSON.stringify([]));
+
+      this.matchColors = new Array(6)
+        .fill(undefined)
+        .map((x) => new Array(5).fill(" "));
       localStorage.setItem(
         "matchColors",
         JSON.stringify(
           new Array(6).fill(undefined).map((x) => new Array(5).fill(" "))
         )
       );
+
+      this.acceptingInputs = true;
       localStorage.setItem("acceptingInputs", "true");
+
+      this.lettersConfirmedCorrect = [];
       localStorage.setItem("lettersConfirmedCorrect", JSON.stringify([]));
+
+      this.lettersConfirmedIncluded = [];
       localStorage.setItem("lettersConfirmedIncluded", JSON.stringify([]));
+
+      this.lettersConfirmedNotIncluded = [];
       localStorage.setItem("lettersConfirmedNotIncluded", JSON.stringify([]));
+
       this.gameStats.mostRecentGuessAmount = 0;
       localStorage.setItem("gameStats", JSON.stringify(this.gameStats));
     },

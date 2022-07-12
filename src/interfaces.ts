@@ -17,6 +17,7 @@ export interface IGameStats {
 }
 
 export interface IState {
+  currentDateId: string;
   validWordList: string[];
   solutionWordList: string[];
   solutionWordListIndex: number;

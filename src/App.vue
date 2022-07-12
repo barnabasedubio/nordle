@@ -51,27 +51,38 @@ function getRemainingTime(): number {
   return timeUntilReset;
 }
 
-function dateOffset(date1: Date, date2: Date) {
-  const MS_PER_DAY = 1000 * 60 * 60 * 24;
-  const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
-  const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
-  return Math.floor((utc2 - utc1) / MS_PER_DAY);
+// e.g: returns "2022712 for 12. July 2022"
+function getCurrentDateId(): string {
+  const date = new Date(Date.now());
+  return `${date.getUTCFullYear()}${
+    date.getUTCMonth() + 1 // in JS date months start at 0
+  }${date.getUTCDate()}`;
 }
 
 onMounted(() => {
-  const d1 = new Date(1624101377000);
-  const d2 = new Date(Date.now());
-  const currentIndex = dateOffset(d1, d2);
-  store.solutionWordListIndex = currentIndex - 1;
-
+  store.solutionWordListIndex = store.getSolutionWordIndex();
+  console.log(store.solutionWordListIndex);
   store.timeUntilReset = getRemainingTime();
+
+  if (!localStorage.getItem("currentDateId")) {
+    store.resetInputs();
+    localStorage.setItem("currentDateId", getCurrentDateId());
+  } else if (localStorage.getItem("currentDateId") !== getCurrentDateId()) {
+    store.resetInputs();
+    localStorage.setItem("currentDateId", getCurrentDateId());
+  }
   console.log(store.todaysWord);
   setInterval(() => {
     store.timeUntilReset = getRemainingTime();
-    if (store.timeUntilReset === 0) {
-      store.resetInputs();
+    if (
+      store.timeUntilReset === 0 ||
+      localStorage.getItem("currentDateId") !== getCurrentDateId()
+    ) {
       // refreshing too soon might result in not updating the word
-      setTimeout(() => window.location.reload(), 1000);
+      setTimeout(() => {
+        store.resetInputs();
+        localStorage.setItem("currentDateId", getCurrentDateId());
+      }, 1000);
     }
   }, 1000);
 });
