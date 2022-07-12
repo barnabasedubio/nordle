@@ -1,10 +1,7 @@
 <script setup lang="ts">
-//import { useStore } from "../store/store.js";
 import WordRow from "../components/WordRow.vue";
 import Keyboard from "../components/Keyboard.vue";
 
-//const store = useStore();
-//const testValue = store.todaysWord.toUpperCase();
 </script>
 
 <template>
@@ -19,7 +16,7 @@ import Keyboard from "../components/Keyboard.vue";
         <WordRow row="5" />
       </div>
       <div class="mx-auto mt-8">
-        <Keyboard />
+        <Keyboard/>
       </div>
     </div>
   </div>

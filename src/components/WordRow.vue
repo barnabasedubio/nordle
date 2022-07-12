@@ -18,8 +18,7 @@ function getLetter(index: number): string {
   }
   if (rowNumber === store.enteredWords.length) {
     return store.currentWordAsArray[index] || "";
-  } 
-	else return "";
+  } else return "";
 }
 
 function matchColor(index: number): string {
@@ -34,10 +33,10 @@ function matchColor(index: number): string {
 
 <template>
   <div class="flex">
-		<WordRowLetter :class="matchColor(0)" :letter="getLetter(0)"/>
-		<WordRowLetter :class="matchColor(1)" :letter="getLetter(1)"/>
-		<WordRowLetter :class="matchColor(2)" :letter="getLetter(2)"/>
-		<WordRowLetter :class="matchColor(3)" :letter="getLetter(3)"/>
-		<WordRowLetter :class="matchColor(4)" :letter="getLetter(4)"/>
+    <WordRowLetter :class="matchColor(0)" :letter="getLetter(0)" />
+    <WordRowLetter :class="matchColor(1)" :letter="getLetter(1)" />
+    <WordRowLetter :class="matchColor(2)" :letter="getLetter(2)" />
+    <WordRowLetter :class="matchColor(3)" :letter="getLetter(3)" />
+    <WordRowLetter :class="matchColor(4)" :letter="getLetter(4)" />
   </div>
 </template>
