@@ -35,4 +35,6 @@ export interface IState {
   gameStats: IGameStats;
   isGameOver: boolean;
   timeUntilReset: number;
+  popupActive: boolean;
+  popupText: string;
 }

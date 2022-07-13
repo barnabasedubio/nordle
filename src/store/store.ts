@@ -71,6 +71,8 @@ export const useStore = defineStore("main", {
         ? JSON.parse(localStorage.getItem("isGameOver")!)
         : false,
       timeUntilReset: 0, // placeholder, actual value is updated in app.vue
+      popupActive: false,
+      popupText: "Some test text here!",
     };
   },
   getters: {
@@ -110,6 +112,10 @@ export const useStore = defineStore("main", {
     },
   },
   actions: {
+    showPopup(text: string): void {
+      this.popupActive = true;
+      this.popupText = text;
+    },
     getDateOffset(date1: Date, date2: Date): number {
       const MS_PER_DAY = 1000 * 60 * 60 * 24;
       const utc1 = Date.UTC(
@@ -191,6 +197,10 @@ export const useStore = defineStore("main", {
       localStorage.setItem("gameStats", JSON.stringify(this.gameStats));
 
       this.solutionWordListIndex = this.getSolutionWordIndex();
+      localStorage.setItem(
+        "solutionWordListIndex",
+        this.solutionWordListIndex.toString()
+      );
     },
     checkIfGameOver(): boolean {
       if (
@@ -199,7 +209,7 @@ export const useStore = defineStore("main", {
       ) {
         this.acceptingInputs = false;
         localStorage.setItem("acceptingInputs", "false");
-        alert("Nice");
+        this.showPopup("Nice");
         this.isGameOver = true;
         this.gameStats.played++;
         this.gameStats.wins++;
@@ -222,7 +232,7 @@ export const useStore = defineStore("main", {
         localStorage.setItem("gameStats", JSON.stringify(this.gameStats));
         localStorage.setItem("acceptingInputs", "false");
         localStorage.setItem("isGameOver", JSON.stringify(this.isGameOver));
-        alert("Game Over! The word was: " + this.todaysWord);
+        this.showPopup("The word was: " + this.todaysWord.toUpperCase());
         return true;
       }
       return false;
@@ -280,7 +290,7 @@ export const useStore = defineStore("main", {
       enteredWord = enteredWord.map((letter) => letter.toLowerCase());
       // if hard mode is activated, make sure entered word satisfies criteria
       if (this.hardMode && !this.satisfiesHardMode(enteredWord)) {
-        alert("Hard mode!");
+        this.showPopup("Hard mode is active!");
         return false;
       }
       const wordMap: IWordMap = { ...this.todaysWordAsMap };
@@ -319,11 +329,12 @@ export const useStore = defineStore("main", {
     },
     sendKey(value: string): void {
       if (value === "ENTER") {
-        if (this.currentWordAsArray.length < 5) alert("not enough letters");
+        if (this.currentWordAsArray.length < 5)
+          this.showPopup("Not enough letters!");
         else {
           const currentWord = this.currentWordAsArray.join("");
           if (!this.validWordList.includes(currentWord.toLowerCase())) {
-            alert("not in word list");
+            this.showPopup("Not in word list!");
             return;
           }
           if (this.evaluateWord(this.currentWordAsArray)) {
@@ -347,7 +358,6 @@ export const useStore = defineStore("main", {
       } else {
         // user typed in a valid letter
         if (this.currentWordAsArray.length === 5) return;
-        console.log(value);
         this.currentWordAsArray.push(value);
         localStorage.setItem(
           "currentWordAsArray",
