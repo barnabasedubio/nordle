@@ -61,7 +61,6 @@ function getCurrentDateId(): string {
 
 onMounted(() => {
   store.solutionWordListIndex = store.getSolutionWordIndex();
-  console.log(store.solutionWordListIndex);
   store.timeUntilReset = getRemainingTime();
 
   if (!localStorage.getItem("currentDateId")) {
@@ -71,18 +70,15 @@ onMounted(() => {
     store.resetInputs();
     localStorage.setItem("currentDateId", getCurrentDateId());
   }
-  console.log(store.todaysWord);
   setInterval(() => {
     store.timeUntilReset = getRemainingTime();
     if (
-      store.timeUntilReset === 0 ||
+      store.timeUntilReset === 86398 || // once it's at 23:59:59 again
       localStorage.getItem("currentDateId") !== getCurrentDateId()
     ) {
-      // refreshing too soon might result in not updating the word
-      setTimeout(() => {
-        store.resetInputs();
-        localStorage.setItem("currentDateId", getCurrentDateId());
-      }, 1000);
+      if (!localStorage.getItem("gameStats")) store.resetInputs(true);
+      else store.resetInputs();
+      localStorage.setItem("currentDateId", getCurrentDateId());
     }
   }, 1000);
 });

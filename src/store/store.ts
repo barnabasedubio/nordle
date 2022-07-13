@@ -7,7 +7,6 @@ import {
   IGameStats,
   IState,
 } from "../interfaces";
-// TODO make the game know what the current word should be even when deleting localstorage
 export const useStore = defineStore("main", {
   state: (): IState => {
     return {
@@ -131,7 +130,7 @@ export const useStore = defineStore("main", {
       const currentIndex = this.getDateOffset(d1, d2);
       return currentIndex - 1;
     },
-    resetInputs(): void {
+    resetInputs(resetGameStats: boolean = false): void {
       // if user didnt submit the correct word in the day, reset current streak
       if (
         !this.enteredWords.length ||
@@ -142,12 +141,6 @@ export const useStore = defineStore("main", {
 
       this.isGameOver = false;
       localStorage.setItem("isGameOver", "false");
-
-      this.solutionWordListIndex = this.getSolutionWordIndex();
-      //localStorage.setItem(
-      //  "solutionWordListIndex",
-      // JSON.stringify(this.solutionWordListIndex)
-      //);
 
       this.currentWordAsArray = [];
       localStorage.setItem("currentWordAsArray", JSON.stringify([]));
@@ -176,9 +169,28 @@ export const useStore = defineStore("main", {
 
       this.lettersConfirmedNotIncluded = [];
       localStorage.setItem("lettersConfirmedNotIncluded", JSON.stringify([]));
+      if (resetGameStats) {
+        this.gameStats = {
+          played: 0,
+          wins: 0,
+          losses: 0,
+          currentStreak: 0,
+          maxStreak: 0,
+          guessDistribution: {
+            one: 0,
+            two: 0,
+            three: 0,
+            four: 0,
+            five: 0,
+            six: 0,
+          } as IGuessDistribution,
+          mostRecentGuessAmount: 0,
+        } as IGameStats;
+      } else this.gameStats.mostRecentGuessAmount = 0;
 
-      this.gameStats.mostRecentGuessAmount = 0;
       localStorage.setItem("gameStats", JSON.stringify(this.gameStats));
+
+      this.solutionWordListIndex = this.getSolutionWordIndex();
     },
     checkIfGameOver(): boolean {
       if (
@@ -335,6 +347,7 @@ export const useStore = defineStore("main", {
       } else {
         // user typed in a valid letter
         if (this.currentWordAsArray.length === 5) return;
+        console.log(value);
         this.currentWordAsArray.push(value);
         localStorage.setItem(
           "currentWordAsArray",
