@@ -52,11 +52,10 @@ function getRemainingTime(): number {
 }
 
 // e.g: returns "2022712 for 12. July 2022"
+// remote UTC part to remaing local
 function getCurrentDateId(): string {
   const date = new Date(Date.now());
-  return `${date.getUTCFullYear()}${
-    date.getUTCMonth() + 1 // in JS date months start at 0
-  }${date.getUTCDate()}`;
+  return `${date.getFullYear()}${date.getMonth() + 1}${date.getDate()}`;
 }
 
 onMounted(() => {
