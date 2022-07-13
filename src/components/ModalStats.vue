@@ -164,21 +164,29 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
-    <div class="mt-3 h-16 flex justify-between">
+    <div
+      class="mt-3 h-16 flex"
+      :class="{
+        'justify-around': !store.isGameOver,
+        'justify-between': store.isGameOver,
+      }"
+    >
       <div class="w-40 text-center flex items-center justify-center">
         <div class="w-full mt-1">
           <p class="text-xs font-bold">Next word in</p>
           <h1 class="text-3xl">{{ remainingTime }}</h1>
         </div>
       </div>
-      <div class="h-full w-px border-solid border border-nord4"></div>
-      <div class="w-40 h-full px-2 py-2 text-center">
-        <button
-          class="h-full w-full font-semibold text-xl bg-nord14 inline-flex items-center justify-center"
-        >
-          <h2 class="h-6">SHARE</h2>
-        </button>
-      </div>
+      <template v-if="store.isGameOver">
+        <div class="h-full w-px border-solid border border-nord0"></div>
+        <div class="w-40 h-full px-2 py-2 text-center">
+          <button
+            class="h-full w-full font-semibold text-xl bg-nord14 inline-flex items-center justify-center"
+          >
+            <h2 class="h-6">SHARE</h2>
+          </button>
+        </div>
+      </template>
     </div>
   </div>
 </template>
