@@ -41,11 +41,11 @@ function copyToClipboard(text: string): void {
   el.value = text;
   el.setAttribute("readonly", "");
   el.setAttribute("style", "position: absolute; left: -9999px");
-	document.body.appendChild(el)
-	el.select()
-	document.execCommand("copy")
-	alert("Copied to clipboard!")
-	document.body.removeChild(el)
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand("copy");
+  store.showPopup("Copied to clipboard!");
+  document.body.removeChild(el);
 }
 
 function generatePerformanceSummary(): void {
@@ -61,9 +61,11 @@ function generatePerformanceSummary(): void {
     store.enteredWords[5] !== store.todaysWord
   )
     attempts = "X";
-  let performanceSummary = `Nordle Day ${store.solutionWordListIndex}: ${attempts}/6\n\n`;
+  let performanceSummary = `Nordle Day ${
+    store.solutionWordListIndex + 1
+  }: ${attempts}/6\n\n`;
   for (let row of store.matchColors) {
-    if (row[0] === "") break;
+    if (row[0] === " ") break;
     for (let color of row) {
       if (color === "green") performanceSummary += wordInCorrectPositionColor;
       else if (color === "yellow")
