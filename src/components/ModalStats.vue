@@ -36,6 +36,45 @@ function getCountDown(): string {
   return formattedTime;
 }
 
+function copyToClipboard(text: string): void {
+  let el = document.createElement("textarea");
+  el.value = text;
+  el.setAttribute("readonly", "");
+  el.setAttribute("style", "position: absolute; left: -9999px");
+	document.body.appendChild(el)
+	el.select()
+	document.execCommand("copy")
+	alert("Copied to clipboard!")
+	document.body.removeChild(el)
+}
+
+function generatePerformanceSummary(): void {
+  if (!store.isGameOver) return; // this should never happen anyway but just in case
+  //TODO: change for high contrast mode
+  const wordInCorrectPositionColor = "🟩";
+  const wordInWrongPositionColor = "🟧";
+  const wordNotIncludedColor = "⬛";
+  let attempts = store.enteredWords.length.toString();
+  // if user failed the day use X instead of number of attempts
+  if (
+    store.enteredWords.length === 6 &&
+    store.enteredWords[5] !== store.todaysWord
+  )
+    attempts = "X";
+  let performanceSummary = `Nordle Day ${store.solutionWordListIndex}: ${attempts}/6\n\n`;
+  for (let row of store.matchColors) {
+    if (row[0] === "") break;
+    for (let color of row) {
+      if (color === "green") performanceSummary += wordInCorrectPositionColor;
+      else if (color === "yellow")
+        performanceSummary += wordInWrongPositionColor;
+      else if (color === "gray") performanceSummary += wordNotIncludedColor;
+    }
+    performanceSummary += "\n";
+  }
+  copyToClipboard(performanceSummary);
+}
+
 onMounted(() => {
   remainingTime.value = getCountDown(); // initial value without the setInterval delay
   interval = setInterval(() => {
@@ -183,7 +222,7 @@ onUnmounted(() => {
           <button
             class="h-full w-full font-semibold text-xl bg-nord14 inline-flex items-center justify-center"
           >
-            <h2 class="h-6">SHARE</h2>
+            <h2 class="h-6" @click="generatePerformanceSummary">SHARE</h2>
           </button>
         </div>
       </template>
