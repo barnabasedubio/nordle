@@ -34,7 +34,7 @@
       </div>
     </div>
     <div>
-      A new word will be available each day! (You can also turn on Free Play
+      A new word will be available each day! (You can also enable Free Play
       Mode in the settings.)
     </div>
   </div>
