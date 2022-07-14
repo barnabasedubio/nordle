@@ -69,6 +69,13 @@ onMounted(() => {
     store.resetInputs();
     localStorage.setItem("currentDateId", getCurrentDateId());
   }
+  // if the game is over and the use did not guess the word, display popup
+  if (
+    store.isGameOver &&
+    store.enteredWords[store.enteredWords.length - 1] !== store.todaysWord
+  ) {
+    store.showPopup("The word was: " + store.todaysWord.toUpperCase());
+  }
   setInterval(() => {
     store.timeUntilReset = getRemainingTime();
     if (localStorage.getItem("currentDateId") !== getCurrentDateId()) {
