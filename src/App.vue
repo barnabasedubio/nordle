@@ -65,16 +65,21 @@ onMounted(() => {
   if (!localStorage.getItem("currentDateId")) {
     store.resetInputs();
     localStorage.setItem("currentDateId", getCurrentDateId());
+    store.activateModal("help");
   } else if (localStorage.getItem("currentDateId") !== getCurrentDateId()) {
     store.resetInputs();
     localStorage.setItem("currentDateId", getCurrentDateId());
   }
   // if the game is over and the use did not guess the word, display popup
-  if (
-    store.isGameOver &&
-    store.enteredWords[store.enteredWords.length - 1] !== store.todaysWord
-  ) {
-    store.showPopup("The word was: " + store.todaysWord.toUpperCase());
+  if (store.isGameOver) {
+    if (
+      store.enteredWords[store.enteredWords.length - 1] !== store.todaysWord
+    ) {
+      store.showPopup("The word was: " + store.todaysWord.toUpperCase());
+      setTimeout(() => store.activateModal("stats"), 2500);
+    } else {
+      setTimeout(() => store.activateModal("stats"), 1000);
+    }
   }
   setInterval(() => {
     store.timeUntilReset = getRemainingTime();

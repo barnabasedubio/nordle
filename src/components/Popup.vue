@@ -10,7 +10,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex justify-center items-center min-w-48 h-12 px-4 border-2 border-nord4 bg-nord1 z-50">
-		<h3 class="h-7 text-nord4 text-xl">{{ store.popupText }}</h3>
+  <div class="flex justify-center items-center h-12 px-4 border-2 border-nord4 bg-nord1 z-50">
+		<h3 class="h-7 text-nord4 text-xl whitespace-nowrap">{{ store.popupText }}</h3>
 	</div>
 </template>

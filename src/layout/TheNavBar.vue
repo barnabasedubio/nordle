@@ -1,22 +1,20 @@
 <script setup lang="ts">
 import TheModal from "../components/TheModal.vue";
-import { ref } from "vue";
+import { useStore } from "../store/store";
 
-let modalActive = ref(false);
-let modalType = ref("");
-
-function activateModal(type: string): void {
-  modalActive.value = true;
-  modalType.value = type;
-}
+const store = useStore();
 
 function closeModal(): void {
-  modalActive.value = false;
+  store.showModal = false;
 }
 </script>
 
 <template>
-  <TheModal v-if="modalActive" :content="modalType" @close-modal="closeModal" />
+  <TheModal
+    v-if="store.showModal"
+    :content="store.modalType"
+    @close-modal="closeModal"
+  />
   <div class="w-full h-12 bg-nord1">
     <div
       class="container mx-auto flex flex-row justify-between items-center h-12"
@@ -32,7 +30,7 @@ function closeModal(): void {
             />
           </a>
         </div>
-        <div class="w-10" @click="activateModal('help')">
+        <div class="w-10" @click="store.activateModal('help')">
           <img
             class="cursor-pointer mx-auto"
             src="../assets/help-svgrepo-com.svg"
@@ -44,7 +42,7 @@ function closeModal(): void {
 
       <div class="w-24 title text-3xl text-nord4">Nordle</div>
       <div class="flex">
-        <div class="w-10" @click="activateModal('stats')">
+        <div class="w-10" @click="store.activateModal('stats')">
           <img
             class="cursor-pointer mx-auto"
             src="../assets/stats-svgrepo-com.svg"
@@ -52,7 +50,7 @@ function closeModal(): void {
             alt="Stats"
           />
         </div>
-        <div class="w-10" @click="activateModal('settings')">
+        <div class="w-10" @click="store.activateModal('settings')">
           <img
             class="cursor-pointer mx-auto"
             src="../assets/settings-svgrepo-com.svg"

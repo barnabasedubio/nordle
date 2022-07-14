@@ -73,6 +73,8 @@ export const useStore = defineStore("main", {
       timeUntilReset: 0, // placeholder, actual value is updated in app.vue
       popupActive: false,
       popupText: "Some test text here!",
+      showModal: false,
+      modalType: "",
     };
   },
   getters: {
@@ -112,6 +114,10 @@ export const useStore = defineStore("main", {
     },
   },
   actions: {
+    activateModal(type: string): void {
+      this.showModal = true;
+      this.modalType = type;
+    },
     showPopup(text: string): void {
       this.popupActive = true;
       this.popupText = text;
@@ -222,6 +228,7 @@ export const useStore = defineStore("main", {
         this.gameStats.mostRecentGuessAmount = this.enteredWords.length;
         localStorage.setItem("gameStats", JSON.stringify(this.gameStats));
         localStorage.setItem("isGameOver", JSON.stringify(this.isGameOver));
+        setTimeout(() => this.activateModal("stats"), 2500);
         return true;
       }
       if (this.enteredWords.length === 6) {
@@ -233,6 +240,7 @@ export const useStore = defineStore("main", {
         localStorage.setItem("acceptingInputs", "false");
         localStorage.setItem("isGameOver", JSON.stringify(this.isGameOver));
         this.showPopup("The word was: " + this.todaysWord.toUpperCase());
+        setTimeout(() => this.activateModal("stats"), 2500);
         return true;
       }
       return false;

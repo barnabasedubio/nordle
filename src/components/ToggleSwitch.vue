@@ -25,7 +25,7 @@ function getValue(property: string) {
 let val = getValue(props.property);
 
 function toggleValue(property: string): void {
-  if (!props.toggleable) store.showPopup("Please finish the game first!");
+  if (!props.toggleable) store.showPopup("Cannot activate while game is active");
   else if (
     property === "hardMode" ||
     property === "darkTheme" ||
