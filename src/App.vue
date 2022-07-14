@@ -71,10 +71,7 @@ onMounted(() => {
   }
   setInterval(() => {
     store.timeUntilReset = getRemainingTime();
-    if (
-      store.timeUntilReset === 86398 || // once it's at 23:59:59 again
-      localStorage.getItem("currentDateId") !== getCurrentDateId()
-    ) {
+    if (localStorage.getItem("currentDateId") !== getCurrentDateId()) {
       if (!localStorage.getItem("gameStats")) store.resetInputs(true);
       else store.resetInputs();
       localStorage.setItem("currentDateId", getCurrentDateId());
