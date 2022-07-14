@@ -8,6 +8,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  toggleable: {
+    type: Boolean,
+    required: true,
+  },
 });
 
 function getValue(property: string) {
@@ -21,7 +25,8 @@ function getValue(property: string) {
 let val = getValue(props.property);
 
 function toggleValue(property: string): void {
-  if (
+  if (!props.toggleable) store.showPopup("Please finish the game first!");
+  else if (
     property === "hardMode" ||
     property === "darkTheme" ||
     property === "highContrast" ||
