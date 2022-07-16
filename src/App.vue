@@ -93,7 +93,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div class="h-full">
     <the-nav-bar></the-nav-bar>
     <the-container></the-container>
   </div>

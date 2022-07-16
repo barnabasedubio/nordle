@@ -8,12 +8,14 @@ const store = useStore();
 </script>
 
 <template>
-  <div class="mt-8">
+  <!--border required (for whatever reason) in order to prevent overflow-->
+  <div class="canvas border">
     <Popup
       v-if="store.popupActive"
       class="absolute top-16 left-1/2 -translate-x-1/2"
     />
-    <div class="flex flex-col justify-center">
+    <div class="flex flex-col justify-between h-full">
+      <div></div>
       <div class="mx-auto">
         <WordRow row="0" />
         <WordRow row="1" />
@@ -22,9 +24,15 @@ const store = useStore();
         <WordRow row="4" />
         <WordRow row="5" />
       </div>
-      <div class="mx-auto mt-8">
+      <div class="mx-auto mb-2">
         <Keyboard />
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.canvas {
+  height: calc(100% - 48px);
+}
+</style>
