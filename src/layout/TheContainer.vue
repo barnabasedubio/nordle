@@ -24,7 +24,7 @@ const store = useStore();
         <WordRow row="4" />
         <WordRow row="5" />
       </div>
-      <div class="mx-auto mb-2">
+      <div class="mx-auto mb-2 w-[100%] sm:w-[39.5rem]">
         <Keyboard />
       </div>
     </div>

@@ -7,16 +7,20 @@ const props = defineProps({
     type: String,
     required: true,
   },
-	deleteKey: {
-		type: Boolean,
-		requred: false
-	}
+  enterKey: {
+    type: Boolean,
+    required: false,
+  },
+  deleteKey: {
+    type: Boolean,
+    requred: false,
+  },
 });
 
 function getWidth() {
   if (props.val === "ENTER" || props.deleteKey) {
-    return " max-w-18";
-  } else return " w-10";
+    return " w-[14%]";
+  } else return " w-[9%]";
 }
 
 function getColor(): string {
@@ -34,7 +38,7 @@ function getColor(): string {
 
 function sendKey(): void {
   if (!store.acceptingInputs) return;
-	if (props.deleteKey) store.sendKey("DEL") 
+  if (props.deleteKey) store.sendKey("DEL");
   else store.sendKey(props.val);
 }
 </script>
@@ -42,14 +46,17 @@ function sendKey(): void {
 <template>
   <div
     @click="sendKey"
-    class="flex justify-center items-center h-14 p-3 border-solid border-2 cursor-pointer m-0.5"
+    class="flex justify-center items-center h-14 p-2 border-solid border-2 cursor-pointer m-0.5"
     :class="getColor() + getWidth()"
   >
-    <div v-if="!props.deleteKey" class="h-5 select-none font-medium">
+    <div v-if="props.deleteKey" class="select-none">
+      <img src="../assets/delete-svgrepo-com.svg" width="32" alt="Delete" />
+    </div>
+    <div v-else-if="props.enterKey" class="h-3 select-none font-medium text-xs">
       {{ props.val }}
     </div>
-		<div v-else>
-			<img src="../assets/delete-svgrepo-com.svg" width="38" alt="Delete">
-		</div>
+    <div v-else class="h-5 select-none font-medium">
+      {{ props.val }}
+    </div>
   </div>
 </template>
