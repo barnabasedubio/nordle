@@ -221,10 +221,10 @@ onUnmounted(() => {
       <template v-if="store.isGameOver">
         <div class="h-full w-px border-solid border border-nord0"></div>
         <div class="w-40 h-full px-2 py-2 text-center">
-          <button
+          <button @click="generatePerformanceSummary"
             class="h-full w-full font-semibold text-xl bg-nord14 inline-flex items-center justify-center"
           >
-            <h2 class="h-6" @click="generatePerformanceSummary">SHARE</h2>
+            <h2 class="h-6">SHARE</h2>
           </button>
         </div>
       </template>
