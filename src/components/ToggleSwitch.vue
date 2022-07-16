@@ -35,6 +35,12 @@ function toggleValue(property: string): void {
     val.value = !val.value;
     store[property] = val.value;
     localStorage.setItem(property, JSON.stringify(val.value));
+		if (property === "freePlayMode" && store.freePlayMode) {
+			store.playNewFreePlayGame()
+		}
+		if (property === "freePlayMode" && !store.freePlayMode) {
+			store.deactivateFreePlayMode()
+		}
   }
 }
 </script>

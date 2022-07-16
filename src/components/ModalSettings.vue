@@ -42,7 +42,7 @@ const gameNotActive = store.isGameOver || store.enteredWords.length === 0
         <h4 class="font-semibold text-sm">Free Play Mode</h4>
         <p class="text-xs">Play all past solutions!</p>
       </div>
-      <ToggleSwitch property="freePlayMode" :toggleable="gameNotActive"/>
+      <ToggleSwitch property="freePlayMode" :toggleable="true"/>
     </div>
     <p class="text-xs mt-1">
       (Your performance in Free Play Mode does not affect your statistics.)

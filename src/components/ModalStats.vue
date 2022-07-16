@@ -208,17 +208,17 @@ onUnmounted(() => {
     <div
       class="mt-3 h-16 flex"
       :class="{
-        'justify-around': !store.isGameOver,
+        'justify-around': !store.isGameOver || store.freePlayMode,
         'justify-between': store.isGameOver,
       }"
     >
       <div class="w-40 text-center flex items-center justify-center">
-        <div class="w-full mt-1">
+        <div class=" w-full mt-1">
           <p class="text-xs font-bold">Next word in</p>
           <h1 class="text-3xl">{{ remainingTime }}</h1>
         </div>
       </div>
-      <template v-if="store.isGameOver">
+      <template v-if="store.isGameOver && !store.freePlayMode">
         <div class="h-full w-px border-solid border border-nord0"></div>
         <div class="w-40 h-full px-2 py-2 text-center">
           <button @click="generatePerformanceSummary"

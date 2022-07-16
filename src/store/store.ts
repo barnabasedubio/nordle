@@ -1,4 +1,4 @@
-import { defineStore } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import validWordList from "../data/validWordList.json";
 import solutionWordList from "../data/solutionWordList.json";
 import {
@@ -46,9 +46,7 @@ export const useStore = defineStore("main", {
       highContrast: localStorage.getItem("highContrast")
         ? JSON.parse(localStorage.getItem("highContrast")!)
         : false,
-      freePlayMode: localStorage.getItem("freePlayMode")
-        ? JSON.parse(localStorage.getItem("freePlayMode")!)
-        : false,
+      freePlayMode: false,
       gameStats: localStorage.getItem("gameStats")
         ? JSON.parse(localStorage.getItem("gameStats")!)
         : ({
@@ -114,6 +112,70 @@ export const useStore = defineStore("main", {
     },
   },
   actions: {
+    playNewFreePlayGame(firstTime: boolean = true): void {
+      // reset inputs in the store (not localstorage)
+      if (firstTime) {
+        this.showPopup("Activated Free Play Mode");
+      }
+      this.isGameOver = false;
+      this.currentWordAsArray = [];
+      this.enteredWords = [];
+      this.matchColors = new Array(6)
+        .fill(undefined)
+        .map((x) => new Array(5).fill(" "));
+      this.acceptingInputs = true;
+      this.lettersConfirmedCorrect = [];
+      this.lettersConfirmedIncluded = [];
+      this.lettersConfirmedNotIncluded = [];
+
+      // return a random day and check if the day has been solved in FPM already
+      let randomDay = Math.floor(
+        Math.random() * this.solutionWordListIndex - 1
+      );
+      this.solutionWordListIndex = randomDay;
+    },
+    deactivateFreePlayMode(): void {
+      this.showPopup("Dectivated Free Play Mode");
+      // restore inputs from localstorage if exists
+      this.currentWordAsArray = localStorage.getItem("currentWordAsArray")
+        ? JSON.parse(localStorage.getItem("currentWordAsArray")!)
+        : [];
+      this.enteredWords = localStorage.getItem("enteredWords")
+        ? JSON.parse(localStorage.getItem("enteredWords")!)
+        : [];
+      this.matchColors = localStorage.getItem("matchColors")
+        ? JSON.parse(localStorage.getItem("matchColors")!)
+        : new Array(6).fill(undefined).map((x) => new Array(5).fill(" "));
+      this.acceptingInputs = localStorage.getItem("acceptingInputs")
+        ? JSON.parse(localStorage.getItem("acceptingInputs")!)
+        : true;
+      this.lettersConfirmedCorrect = localStorage.getItem(
+        "lettersConfirmedCorrect"
+      )
+        ? JSON.parse(localStorage.getItem("lettersConfirmedCorrect")!)
+        : [];
+      this.lettersConfirmedIncluded = localStorage.getItem(
+        "lettersConfirmedIncluded"
+      )
+        ? JSON.parse(localStorage.getItem("lettersConfirmedIncluded")!)
+        : [];
+      this.lettersConfirmedNotIncluded = localStorage.getItem(
+        "lettersConfirmedNotIncluded"
+      )
+        ? JSON.parse(localStorage.getItem("lettersConfirmedNotIncluded")!)
+        : [];
+      this.isGameOver = localStorage.getItem("isGameOver")
+        ? JSON.parse(localStorage.getItem("isGameOver")!)
+        : false;
+
+      this.solutionWordListIndex = this.getSolutionWordIndex();
+    },
+    saveToLocalStorage(key: string, value: any): void {
+      if (this.freePlayMode) return;
+      else {
+        localStorage.setItem(key, JSON.stringify(value));
+      }
+    },
     activateModal(type: string): void {
       this.showModal = true;
       this.modalType = type;
@@ -152,35 +214,34 @@ export const useStore = defineStore("main", {
       }
 
       this.isGameOver = false;
-      localStorage.setItem("isGameOver", "false");
+      this.saveToLocalStorage("isGameOver", false);
 
       this.currentWordAsArray = [];
-      localStorage.setItem("currentWordAsArray", JSON.stringify([]));
+      this.saveToLocalStorage("currentWordAsArray", []);
 
       this.enteredWords = [];
-      localStorage.setItem("enteredWords", JSON.stringify([]));
+      this.saveToLocalStorage("enteredWords", []);
 
       this.matchColors = new Array(6)
         .fill(undefined)
         .map((x) => new Array(5).fill(" "));
-      localStorage.setItem(
+      this.saveToLocalStorage(
         "matchColors",
-        JSON.stringify(
-          new Array(6).fill(undefined).map((x) => new Array(5).fill(" "))
-        )
+        new Array(6).fill(undefined).map((x) => new Array(5).fill(" "))
       );
 
       this.acceptingInputs = true;
-      localStorage.setItem("acceptingInputs", "true");
+      this.saveToLocalStorage("acceptingInputs", true);
 
       this.lettersConfirmedCorrect = [];
-      localStorage.setItem("lettersConfirmedCorrect", JSON.stringify([]));
+      this.saveToLocalStorage("lettersConfirmedCorrect", []);
 
       this.lettersConfirmedIncluded = [];
-      localStorage.setItem("lettersConfirmedIncluded", JSON.stringify([]));
+      this.saveToLocalStorage("lettersConfirmedIncluded", []);
 
       this.lettersConfirmedNotIncluded = [];
-      localStorage.setItem("lettersConfirmedNotIncluded", JSON.stringify([]));
+      this.saveToLocalStorage("lettersConfirmedNotIncluded", []);
+
       if (resetGameStats) {
         this.gameStats = {
           played: 0,
@@ -200,12 +261,12 @@ export const useStore = defineStore("main", {
         } as IGameStats;
       } else this.gameStats.mostRecentGuessAmount = 0;
 
-      localStorage.setItem("gameStats", JSON.stringify(this.gameStats));
+      this.saveToLocalStorage("gameStats", this.gameStats);
 
       this.solutionWordListIndex = this.getSolutionWordIndex();
-      localStorage.setItem(
+      this.saveToLocalStorage(
         "solutionWordListIndex",
-        this.solutionWordListIndex.toString()
+        this.solutionWordListIndex
       );
     },
     checkIfGameOver(): boolean {
@@ -213,10 +274,14 @@ export const useStore = defineStore("main", {
         this.enteredWords[this.enteredWords.length - 1].toLowerCase() ===
         this.todaysWord
       ) {
-        this.acceptingInputs = false;
-        localStorage.setItem("acceptingInputs", "false");
-        this.showPopup("Nice");
         this.isGameOver = true;
+        this.acceptingInputs = false;
+        this.saveToLocalStorage("isGameOver", this.isGameOver);
+        this.saveToLocalStorage("acceptingInputs", false);
+        this.showPopup("Nice");
+        if (this.freePlayMode) {
+          return true;
+        }
         this.gameStats.played++;
         this.gameStats.wins++;
         this.gameStats.currentStreak++;
@@ -226,20 +291,22 @@ export const useStore = defineStore("main", {
             : this.gameStats.maxStreak;
         this.gameStats.guessDistribution[this.numberOfEnteredWords]++;
         this.gameStats.mostRecentGuessAmount = this.enteredWords.length;
-        localStorage.setItem("gameStats", JSON.stringify(this.gameStats));
-        localStorage.setItem("isGameOver", JSON.stringify(this.isGameOver));
+        this.saveToLocalStorage("gameStats", this.gameStats);
         setTimeout(() => this.activateModal("stats"), 2500);
         return true;
       }
       if (this.enteredWords.length === 6) {
         this.isGameOver = true;
+        this.acceptingInputs = false;
+        this.saveToLocalStorage("isGameOver", this.isGameOver);
+        this.saveToLocalStorage("acceptingInputs", this.acceptingInputs);
+        this.showPopup("The word was: " + this.todaysWord.toUpperCase());
+        if (this.freePlayMode) {
+          return true;
+        }
         this.gameStats.played++;
         this.gameStats.currentStreak = 0;
-        this.acceptingInputs = false;
-        localStorage.setItem("gameStats", JSON.stringify(this.gameStats));
-        localStorage.setItem("acceptingInputs", "false");
-        localStorage.setItem("isGameOver", JSON.stringify(this.isGameOver));
-        this.showPopup("The word was: " + this.todaysWord.toUpperCase());
+        this.saveToLocalStorage("gameStats", this.gameStats);
         setTimeout(() => this.activateModal("stats"), 2500);
         return true;
       }
@@ -251,23 +318,23 @@ export const useStore = defineStore("main", {
       for (let i = 0; i < enteredWord.length; i++) {
         if (matchColor[i] === "green") {
           this.lettersConfirmedCorrect.push(enteredWord[i]);
-          localStorage.setItem(
+          this.saveToLocalStorage(
             "lettersConfirmedCorrect",
-            JSON.stringify(this.lettersConfirmedCorrect)
+            this.lettersConfirmedCorrect
           );
         }
         if (matchColor[i] === "yellow") {
           this.lettersConfirmedIncluded.push(enteredWord[i]);
-          localStorage.setItem(
+          this.saveToLocalStorage(
             "lettersConfirmedIncluded",
-            JSON.stringify(this.lettersConfirmedIncluded)
+            this.lettersConfirmedIncluded
           );
         }
         if (matchColor[i] === "gray") {
           this.lettersConfirmedNotIncluded.push(enteredWord[i]);
-          localStorage.setItem(
+          this.saveToLocalStorage(
             "lettersConfirmedNotIncluded",
-            JSON.stringify(this.lettersConfirmedNotIncluded)
+            this.lettersConfirmedNotIncluded
           );
         }
       }
@@ -307,7 +374,7 @@ export const useStore = defineStore("main", {
         if (enteredWord[i] === this.todaysWord[i]) {
           wordMap[enteredWord[i]]--;
           this.matchColors[this.enteredWords.length][i] = "green";
-          localStorage.setItem("matchColors", JSON.stringify(this.matchColors));
+          this.saveToLocalStorage("matchColors", this.matchColors);
         }
       }
       for (let i = 0; i < 5; i++) {
@@ -319,11 +386,11 @@ export const useStore = defineStore("main", {
           wordMap[enteredWord[i]] === 0
         ) {
           this.matchColors[this.enteredWords.length][i] = "gray";
-          localStorage.setItem("matchColors", JSON.stringify(this.matchColors));
+          this.saveToLocalStorage("matchColors", this.matchColors);
         } else {
           // letters that exist in the word somewhere
           this.matchColors[this.enteredWords.length][i] = "yellow";
-          localStorage.setItem("matchColors", JSON.stringify(this.matchColors));
+          this.saveToLocalStorage("matchColors", this.matchColors);
           wordMap[enteredWord[i]]--;
         }
       }
@@ -332,7 +399,7 @@ export const useStore = defineStore("main", {
         this.matchColors[this.enteredWords.length]
       );
       this.enteredWords.push(enteredWord.join(""));
-      localStorage.setItem("enteredWords", JSON.stringify(this.enteredWords));
+      this.saveToLocalStorage("enteredWords", this.enteredWords);
       return true;
     },
     sendKey(value: string): void {
@@ -349,28 +416,25 @@ export const useStore = defineStore("main", {
             // word was successfully registered as an attempt
             this.checkIfGameOver();
             this.currentWordAsArray = [];
-            localStorage.setItem(
+            this.saveToLocalStorage(
               "currentWordAsArray",
-              JSON.stringify(this.currentWordAsArray)
+              this.currentWordAsArray
             );
           }
         }
       } else if (value === "DEL") {
         if (!!this.currentWordAsArray.length) {
           this.currentWordAsArray.pop();
-          localStorage.setItem(
+          this.saveToLocalStorage(
             "currentWordAsArray",
-            JSON.stringify(this.currentWordAsArray)
+            this.currentWordAsArray
           );
         }
       } else {
         // user typed in a valid letter
         if (this.currentWordAsArray.length === 5) return;
         this.currentWordAsArray.push(value);
-        localStorage.setItem(
-          "currentWordAsArray",
-          JSON.stringify(this.currentWordAsArray)
-        );
+        this.saveToLocalStorage("currentWordAsArray", this.currentWordAsArray);
       }
     },
   },
