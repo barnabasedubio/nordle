@@ -9,7 +9,7 @@ const store = useStore();
 
 <template>
   <!--border required (for whatever reason) in order to prevent overflow-->
-  <div class="canvas border">
+  <div class="canvas ">
     <Popup
       v-if="store.popupActive"
       class="absolute top-16 left-1/2 -translate-x-1/2"
