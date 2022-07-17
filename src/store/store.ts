@@ -213,6 +213,8 @@ export const useStore = defineStore("main", {
         this.gameStats.currentStreak = 0;
       }
 
+      this.freePlayMode = false;
+
       this.isGameOver = false;
       this.saveToLocalStorage("isGameOver", false);
 
