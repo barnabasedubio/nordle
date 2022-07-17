@@ -29,12 +29,12 @@ const store = useStore();
       </div>
       <div
         v-if="store.isGameOver && store.freePlayMode"
-        class="cursor-pointer flex px-2 justify-between h-8 mx-auto text-3xl text-nord4"
+        class="cursor-pointer flex px-4 justify-between items-center border h-14 bg-nord2 hover:bg-nord1 mx-auto text-3xl text-nord4"
         @click="store.playNewFreePlayGame(false)"
       >
-        PLAY AGAIN
+        <h4 class="h-8">PLAY AGAIN</h4>
         <img
-          class="inline relative left-2 bottom-1"
+          class="inline relative bottom-0.5 ml-2"
           src="../assets/replay-svgrepo-com.svg"
           width="32"
           alt=""

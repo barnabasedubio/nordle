@@ -8,7 +8,12 @@ document.title = "Nordle";
 const store = useStore();
 
 window.addEventListener("keydown", (e) => {
-  if (!store.acceptingInputs) return;
+  if (!store.acceptingInputs) {
+    if (store.freePlayMode && store.isGameOver && e.key === "Enter") {
+      store.playNewFreePlayGame(false);
+      return;
+    } else return;
+  }
   const validKeys = [
     "a",
     "b",

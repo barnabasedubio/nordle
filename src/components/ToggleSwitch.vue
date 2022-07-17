@@ -25,7 +25,7 @@ function getValue(property: string) {
 let val = getValue(props.property);
 
 function toggleValue(property: string): void {
-  if (!props.toggleable) store.showPopup("Cannot activate while game is active");
+  if (!props.toggleable) store.showPopup("Cannot change while game is active");
   else if (
     property === "hardMode" ||
     property === "darkTheme" ||
@@ -35,12 +35,12 @@ function toggleValue(property: string): void {
     val.value = !val.value;
     store[property] = val.value;
     localStorage.setItem(property, JSON.stringify(val.value));
-		if (property === "freePlayMode" && store.freePlayMode) {
-			store.playNewFreePlayGame()
-		}
-		if (property === "freePlayMode" && !store.freePlayMode) {
-			store.deactivateFreePlayMode()
-		}
+    if (property === "freePlayMode" && store.freePlayMode) {
+      store.playNewFreePlayGame();
+    }
+    if (property === "freePlayMode" && !store.freePlayMode) {
+      store.deactivateFreePlayMode();
+    }
   }
 }
 </script>
