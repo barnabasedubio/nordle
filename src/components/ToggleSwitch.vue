@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from "../store/store";
 
 const store = useStore();
@@ -48,7 +48,7 @@ function toggleValue(property: string): void {
 <template>
   <div
     @click="toggleValue(props.property)"
-    :class="{ 'bg-nord14': val, 'justify-end': val, 'bg-nord0': !val }"
+    :class="{ 'bg-nord14': val, 'justify-end': val, 'bg-nord3': !val }"
     class="flex w-10 h-6 p-1 rounded-xl cursor-pointer"
   >
     <div

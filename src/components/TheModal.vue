@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onUnmounted } from "vue";
+import { onUnmounted, computed } from "vue";
 import { useStore } from "../store/store";
 import ModalHelp from "./ModalHelp.vue";
 import ModalStats from "./ModalStats.vue";
@@ -13,6 +13,12 @@ const props = defineProps({
     requred: true,
   },
 });
+const backdropBackgroundColor = computed(() => {
+	return store.darkTheme ? "bg-nord0" : "bg-nord3"
+})
+const modalBackgroundColor = computed(() => {
+	return store.darkTheme ? "border-nord3 bg-nord2" : "border-nord3 bg-nord4"
+})
 
 function closeModal() {
   emit("close-modal");
@@ -30,11 +36,13 @@ onUnmounted(() => {
 <template>
   <div class="w-full h-full absolute top-0 left-0">
     <div
-      class="backdrop opacity-90 absolute w-full h-full top-0 left-0 bg-nord0"
+      class="backdrop opacity-90 absolute w-full h-full top-0 left-0"
+			:class="backdropBackgroundColor"
       @click="closeModal"
     ></div>
     <div
-      class="p-2 text-left relative z-50 w-[95%] sm:w-96 mt-24 mx-auto border-solid border-2 border-nord3 bg-nord2"
+      class="p-2 text-left relative z-50 w-[95%] sm:w-96 mt-24 mx-auto border-solid border-2"
+			:class="modalBackgroundColor"
     >
       <div @click="closeModal" class="absolute right-4 top-3.5 cursor-pointer">
         <img src="../assets/close-svgrepo-com.svg" alt="Close modal" />

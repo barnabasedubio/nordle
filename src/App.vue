@@ -112,7 +112,6 @@ onMounted(() => {
   padding: 0;
 }
 html {
-  background-color: #2e3440;
   height: 100%;
 }
 body {

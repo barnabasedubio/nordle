@@ -31,9 +31,9 @@ function getColor(): string {
     return "bg-nord12";
   }
   if (store.lettersConfirmedNotIncluded.includes(props.val.toLowerCase())) {
-    return "bg-nord0";
+    return store.darkTheme ? "bg-nord0" : "bg-nord3";
   }
-  return "bg-nord3";
+  return store.darkTheme ? "bg-nord3" : "bg-nord4";
 }
 
 function sendKey(): void {

@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useStore } from "../store/store";
 
 let interval: NodeJS.Timer;
 const store = useStore();
+
+const textColor = computed(() => {
+  return store.darkTheme ? "text-nord4" : "text-nord3";
+});
 
 let remainingTime = ref("");
 let oneGuessPercentage = ref(0);
@@ -96,13 +100,20 @@ onMounted(() => {
   sixGuessesPercentage.value = (distribution.six / mostGuessesAmount) * 100;
 });
 
+function getBackgroundFor(num: number): string {
+  if (getMostRecentGuess(num)) return "bg-nord14";
+  else {
+    return store.darkTheme ? "bg-nord0" : "bg-nord3";
+  }
+}
+
 onUnmounted(() => {
   clearInterval(interval);
 });
 </script>
 
 <template>
-  <div class="text-nord4">
+  <div :class="textColor">
     <div class="text-center mt-2 mb-2">
       <h3 class="font-bold">STATISTICS</h3>
     </div>
@@ -130,78 +141,60 @@ onUnmounted(() => {
         <p class="h-full py-px">1</p>
         <div
           :style="{ width: oneGuessPercentage + '%' }"
-          :class="{
-            'bg-nord14': getMostRecentGuess(1),
-            'bg-nord0': !getMostRecentGuess(1),
-          }"
+          :class="[getBackgroundFor(1)]"
           class="h-full min-w-[6.7%] ml-1 py-px px-2 text-right"
         >
-          <p>{{ store.gameStats.guessDistribution.one }}</p>
+          <p class="text-nord4">{{ store.gameStats.guessDistribution.one }}</p>
         </div>
       </div>
       <div class="h-6 flex mb-0.5 px-2">
         <p class="h-full py-px">2</p>
         <div
           :style="{ width: twoGuessesPercentage + '%' }"
-          :class="{
-            'bg-nord14': getMostRecentGuess(2),
-            'bg-nord0': !getMostRecentGuess(2),
-          }"
+          :class="[getBackgroundFor(2)]"
           class="h-full min-w-[6.7%] ml-1 py-px px-2 text-right"
         >
-          <p>{{ store.gameStats.guessDistribution.two }}</p>
+          <p class="text-nord4">{{ store.gameStats.guessDistribution.two }}</p>
         </div>
       </div>
       <div class="h-6 flex mb-0.5 px-2">
         <p class="h-full py-px">3</p>
         <div
           :style="{ width: threeGuessesPercentage + '%' }"
-          :class="{
-            'bg-nord14': getMostRecentGuess(3),
-            'bg-nord0': !getMostRecentGuess(3),
-          }"
+          :class="[getBackgroundFor(3)]"
           class="h-full min-w-[6.7%] ml-1 py-px px-2 text-right"
         >
-          <p>{{ store.gameStats.guessDistribution.three }}</p>
+          <p class="text-nord4">{{ store.gameStats.guessDistribution.three }}</p>
         </div>
       </div>
       <div class="h-6 flex mb-0.5 px-2">
         <p class="h-full py-px">4</p>
         <div
           :style="{ width: fourGuessesPercentage + '%' }"
-          :class="{
-            'bg-nord14': getMostRecentGuess(4),
-            'bg-nord0': !getMostRecentGuess(4),
-          }"
+          :class="[getBackgroundFor(4)]"
           class="h-full min-w-[6.7%] ml-1 py-px px-2 text-right"
         >
-          <p>{{ store.gameStats.guessDistribution.four }}</p>
+          <p class="text-nord4">{{ store.gameStats.guessDistribution.four }}</p>
         </div>
       </div>
       <div class="h-6 flex mb-0.5 px-2">
         <p class="h-full py-px">5</p>
         <div
           :style="{ width: fiveGuessesPercentage + '%' }"
-          :class="{
-            'bg-nord14': getMostRecentGuess(5),
-            'bg-nord0': !getMostRecentGuess(5),
-          }"
+          :class="[getBackgroundFor(5)]"
           class="h-full min-w-[6.7%] ml-1 py-px px-2 text-right"
         >
-          <p>{{ store.gameStats.guessDistribution.five }}</p>
+          <p class="text-nord4">{{ store.gameStats.guessDistribution.five }}</p>
         </div>
       </div>
       <div class="h-6 flex mb-0.5 px-2">
         <p class="h-full py-px">6</p>
         <div
           :style="{ width: sixGuessesPercentage + '%' }"
-          :class="{
-            'bg-nord14': getMostRecentGuess(6),
-            'bg-nord0': !getMostRecentGuess(6),
-          }"
+          :class="[getBackgroundFor(6)]"
           class="h-full min-w-[6.7%] ml-1 py-px px-2 text-right"
         >
-          <p>{{ store.gameStats.guessDistribution.six }}</p>
+          <p class="text-nord4">{{ store.gameStats.guessDistribution.six }}</p>
         </div>
       </div>
     </div>
@@ -213,7 +206,7 @@ onUnmounted(() => {
       }"
     >
       <div class="w-40 text-center flex items-center justify-center">
-        <div class=" w-full mt-1">
+        <div class="w-full mt-1">
           <p class="text-xs font-bold">Next word in</p>
           <h1 class="text-3xl">{{ remainingTime }}</h1>
         </div>
@@ -221,10 +214,11 @@ onUnmounted(() => {
       <template v-if="store.isGameOver && !store.freePlayMode">
         <div class="h-full w-px border-solid border border-nord0"></div>
         <div class="w-40 h-full px-2 py-2 text-center">
-          <button @click="generatePerformanceSummary"
+          <button
+            @click="generatePerformanceSummary"
             class="h-full w-full font-semibold text-xl bg-nord14 inline-flex items-center justify-center"
           >
-            <h2 class="h-6">SHARE</h2>
+            <h2 class="h-6 text-nord4">SHARE</h2>
           </button>
         </div>
       </template>

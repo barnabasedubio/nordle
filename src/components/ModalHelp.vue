@@ -1,6 +1,17 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useStore } from '../store/store';
+
+const store = useStore()
+const textColor = computed(() => {
+	return store.darkTheme ? "text-nord4" : "text-nord3"
+})
+const letterNotInWordColor = computed(() => {
+	return store.darkTheme ? "bg-nord0 border-2 border-nord0": "bg-nord4 border border-nord3"
+})
+</script>
 <template>
-  <div class="text-nord4">
+  <div :class="textColor">
     <div class="text-center mt-2 mb-2">
       <h3 class="font-bold">HOW TO PLAY</h3>
     </div>
@@ -17,7 +28,7 @@
     </div>
     <div>
       <div class="flex mt-4">
-        <div class="h-5 w-5 bg-nord0 border-solid border-2 border-nord0"></div>
+        <div class="h-5 w-5" :class="letterNotInWordColor"></div>
         <p class="ml-2">The letter is not in the word.</p>
       </div>
       <div class="flex mt-4">
