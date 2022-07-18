@@ -43,9 +43,6 @@ export const useStore = defineStore("main", {
       darkTheme: localStorage.getItem("darkTheme")
         ? JSON.parse(localStorage.getItem("darkTheme")!)
         : false,
-      highContrast: localStorage.getItem("highContrast")
-        ? JSON.parse(localStorage.getItem("highContrast")!)
-        : false,
       freePlayMode: false,
       gameStats: localStorage.getItem("gameStats")
         ? JSON.parse(localStorage.getItem("gameStats")!)

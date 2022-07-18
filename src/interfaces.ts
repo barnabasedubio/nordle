@@ -30,7 +30,6 @@ export interface IState {
   lettersConfirmedNotIncluded: string[];
   hardMode: boolean;
   darkTheme: boolean;
-  highContrast: boolean;
   freePlayMode: boolean;
   gameStats: IGameStats;
   isGameOver: boolean;

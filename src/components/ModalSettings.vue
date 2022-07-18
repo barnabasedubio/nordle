@@ -35,14 +35,6 @@ const textColor = computed(() => {
     <hr class="mt-4" />
     <div class="mt-4 flex justify-between items-center">
       <div>
-        <h4 class="font-semibold text-sm">High Contrast Mode</h4>
-        <p class="text-xs">For improved color vision.</p>
-      </div>
-      <ToggleSwitch property="highContrast" :toggleable="true" />
-    </div>
-    <hr class="mt-4" />
-    <div class="mt-4 flex justify-between items-center">
-      <div>
         <h4 class="font-semibold text-sm">Free Play Mode</h4>
         <p class="text-xs">Play all past solutions!</p>
       </div>
