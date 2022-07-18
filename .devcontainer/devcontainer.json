@@ -3,9 +3,10 @@
 	"dockerFile": "Dockerfile",
 	"forwardPorts": [ 3000 ],
 	"extensions": [
+		// required
 		"vue.volar",
-		"hollowtree.vue-snippets",
 		"ms-azuretools.vscode-docker",
+		// optional
 		"esbenp.prettier-vscode",
 		"formulahendry.auto-rename-tag",
 		"usernamehw.errorlens",
