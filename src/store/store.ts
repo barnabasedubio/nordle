@@ -68,6 +68,7 @@ export const useStore = defineStore("main", {
       timeUntilReset: 0, // placeholder, actual value is updated in app.vue
       popupActive: false,
       popupText: "Some test text here!",
+	  popupType: "INFO",
       showModal: false,
       modalType: "",
     };
@@ -112,7 +113,7 @@ export const useStore = defineStore("main", {
     playNewFreePlayGame(firstTime: boolean = true): void {
       // reset inputs in the store (not localstorage)
       if (firstTime) {
-        this.showPopup("Activated Free Play Mode");
+        this.showPopup("Activated Free Play Mode", "INFO");
       }
       this.isGameOver = false;
       this.currentWordAsArray = [];
@@ -132,7 +133,7 @@ export const useStore = defineStore("main", {
       this.solutionWordListIndex = randomDay;
     },
     deactivateFreePlayMode(): void {
-      this.showPopup("Dectivated Free Play Mode");
+      this.showPopup("Dectivated Free Play Mode", "INFO");
       // restore inputs from localstorage if exists
       this.currentWordAsArray = localStorage.getItem("currentWordAsArray")
         ? JSON.parse(localStorage.getItem("currentWordAsArray")!)
@@ -177,9 +178,10 @@ export const useStore = defineStore("main", {
       this.showModal = true;
       this.modalType = type;
     },
-    showPopup(text: string): void {
+    showPopup(text: string, type:"ERROR" | "INFO"): void {
       this.popupActive = true;
       this.popupText = text;
+	  this.popupType = type;
     },
     getDateOffset(date1: Date, date2: Date): number {
       const MS_PER_DAY = 1000 * 60 * 60 * 24;
@@ -277,7 +279,7 @@ export const useStore = defineStore("main", {
         this.acceptingInputs = false;
         this.saveToLocalStorage("isGameOver", this.isGameOver);
         this.saveToLocalStorage("acceptingInputs", false);
-        this.showPopup("Nice");
+        this.showPopup("Nice", "INFO");
         if (this.freePlayMode) {
           return true;
         }
@@ -299,7 +301,7 @@ export const useStore = defineStore("main", {
         this.acceptingInputs = false;
         this.saveToLocalStorage("isGameOver", this.isGameOver);
         this.saveToLocalStorage("acceptingInputs", this.acceptingInputs);
-        this.showPopup("The word was: " + this.todaysWord.toUpperCase());
+        this.showPopup("The word was: " + this.todaysWord.toUpperCase(), "INFO");
         if (this.freePlayMode) {
           return true;
         }
@@ -364,7 +366,7 @@ export const useStore = defineStore("main", {
       enteredWord = enteredWord.map((letter) => letter.toLowerCase());
       // if hard mode is activated, make sure entered word satisfies criteria
       if (this.hardMode && !this.satisfiesHardMode(enteredWord)) {
-        this.showPopup("Hard mode is active!");
+        this.showPopup("Hard mode is active!", "ERROR");
         return false;
       }
       const wordMap: IWordMap = { ...this.todaysWordAsMap };
@@ -404,11 +406,11 @@ export const useStore = defineStore("main", {
     sendKey(value: string): void {
       if (value === "ENTER") {
         if (this.currentWordAsArray.length < 5)
-          this.showPopup("Not enough letters!");
+          this.showPopup("Not enough letters!", "ERROR");
         else {
           const currentWord = this.currentWordAsArray.join("");
           if (!this.validWordList.includes(currentWord.toLowerCase())) {
-            this.showPopup("Not in word list!");
+            this.showPopup("Not in word list!", "ERROR");
             return;
           }
           if (this.evaluateWord(this.currentWordAsArray)) {

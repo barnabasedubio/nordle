@@ -17,7 +17,6 @@ const props = defineProps({
 function getValue(property: string) {
   if (property === "hardMode") return ref(store.hardMode);
   if (property === "darkTheme") return ref(store.darkTheme);
-  if (property === "highContrast") return ref(store.highContrast);
   if (property === "freePlayMode") return ref(store.freePlayMode);
   return ref(false);
 }
@@ -25,11 +24,10 @@ function getValue(property: string) {
 let val = getValue(props.property);
 
 function toggleValue(property: string): void {
-  if (!props.toggleable) store.showPopup("Cannot change while game is active");
+  if (!props.toggleable) store.showPopup("Cannot change while game is active", "ERROR");
   else if (
     property === "hardMode" ||
     property === "darkTheme" ||
-    property === "highContrast" ||
     property === "freePlayMode"
   ) {
     val.value = !val.value;

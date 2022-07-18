@@ -48,7 +48,7 @@ function copyToClipboard(text: string): void {
   document.body.appendChild(el);
   el.select();
   document.execCommand("copy");
-  store.showPopup("Copied to clipboard!");
+  store.showPopup("Copied to clipboard!", "INFO");
   document.body.removeChild(el);
 }
 

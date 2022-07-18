@@ -10,8 +10,10 @@ const backgroundColor = computed(() => {
   return store.darkTheme ? "bg-nord0" : "bg-nord5";
 });
 const popupBackgroundColor = computed(() => {
-	return store.darkTheme ? "bg-nord2 hover:bg-nord1" : "bg-nord5 hover:bg-nord4 border-2 border-nord3";
-})
+  return store.darkTheme
+    ? "bg-nord2 hover:bg-nord1"
+    : "bg-nord5 hover:bg-nord4 border-2 border-nord3";
+});
 const textColor = computed(() => {
   return store.darkTheme ? "text-nord4" : "text-nord3";
 });
@@ -25,10 +27,12 @@ const replayIcon = computed(() => {
 <template>
   <!--border required (for whatever reason) in order to prevent overflow-->
   <div class="canvas" :class="backgroundColor">
-    <Popup
-      v-if="store.popupActive"
-      class="absolute top-16 left-1/2 -translate-x-1/2"
-    />
+    <Transition>
+      <Popup
+        class="absolute top-16 flex left-1/2 -translate-x-1/2"
+        v-if="store.popupActive"
+      />
+    </Transition>
     <div class="flex flex-col justify-between h-full">
       <!-- empty div needed for flex reasons -->
       <div></div>
@@ -69,5 +73,13 @@ const replayIcon = computed(() => {
 <style scoped>
 .canvas {
   height: calc(100% - 48px);
+}
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.25s ease;
+}
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>

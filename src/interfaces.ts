@@ -36,6 +36,7 @@ export interface IState {
   timeUntilReset: number;
   popupActive: boolean;
   popupText: string;
+  popupType: "ERROR" | "INFO";
   showModal: boolean;
   modalType: string;
 }
