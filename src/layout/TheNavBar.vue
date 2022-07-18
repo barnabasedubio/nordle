@@ -38,11 +38,13 @@ const settingsIconPath = computed(() => {
 </script>
 
 <template>
-  <TheModal
-    v-if="store.showModal"
-    :content="store.modalType"
-    @close-modal="closeModal"
-  />
+  <transition name="slide-fade">
+    <TheModal
+      v-if="store.showModal"
+      :content="store.modalType"
+      @close-modal="closeModal"
+    />
+  </transition>
   <div class="w-full h-12" :class="backgroundColor">
     <div
       class="container mx-auto flex flex-row justify-between items-center h-12"
@@ -94,5 +96,14 @@ const settingsIconPath = computed(() => {
 <style scoped>
 .title {
   font-family: "Paytone One";
+}
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.2s ease;
+}
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
 }
 </style>

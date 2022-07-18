@@ -4,6 +4,7 @@ import { useStore } from "../store/store";
 import ModalHelp from "./ModalHelp.vue";
 import ModalStats from "./ModalStats.vue";
 import ModalSettings from "./ModalSettings.vue";
+import { kMaxLength } from "buffer";
 
 const emit = defineEmits(["close-modal"]);
 const store = useStore();
@@ -14,11 +15,16 @@ const props = defineProps({
   },
 });
 const backdropBackgroundColor = computed(() => {
-	return store.darkTheme ? "bg-nord0" : "bg-nord3"
-})
+  return store.darkTheme ? "bg-nord0" : "bg-nord3";
+});
 const modalBackgroundColor = computed(() => {
-	return store.darkTheme ? "border-nord3 bg-nord2" : "border-nord3 bg-nord4"
-})
+  return store.darkTheme ? "border-nord3 bg-nord2" : "border-nord3 bg-nord4";
+});
+const closeIconPath = computed(() => {
+  return store.darkTheme
+    ? new URL("../assets/close.svg", import.meta.url).href
+    : new URL("../assets/close-dark.svg", import.meta.url).href;
+});
 
 function closeModal() {
   emit("close-modal");
@@ -37,15 +43,15 @@ onUnmounted(() => {
   <div class="w-full h-full absolute top-0 left-0">
     <div
       class="backdrop opacity-90 absolute w-full h-full top-0 left-0"
-			:class="backdropBackgroundColor"
+      :class="backdropBackgroundColor"
       @click="closeModal"
     ></div>
     <div
-      class="p-2 text-left relative z-50 w-[95%] sm:w-96 mt-24 mx-auto border-solid border-2"
-			:class="modalBackgroundColor"
+      class="p-2 text-left relative z-50 w-[95%] sm:w-96 mt-24 mx-auto border-solid border-4"
+      :class="modalBackgroundColor"
     >
       <div @click="closeModal" class="absolute right-4 top-3.5 cursor-pointer">
-        <img src="../assets/close-svgrepo-com.svg" alt="Close modal" />
+        <img :src="closeIconPath" alt="Close modal" />
       </div>
       <ModalHelp v-if="props.content === 'help'" />
       <ModalStats v-if="props.content === 'stats'" />
@@ -53,3 +59,5 @@ onUnmounted(() => {
     </div>
   </div>
 </template>
+
+<style scoped></style>

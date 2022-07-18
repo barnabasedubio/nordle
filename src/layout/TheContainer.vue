@@ -27,12 +27,12 @@ const replayIcon = computed(() => {
 <template>
   <!--border required (for whatever reason) in order to prevent overflow-->
   <div class="canvas" :class="backgroundColor">
-    <Transition>
+    <transition name="fade">
       <Popup
         class="absolute top-16 flex left-1/2 -translate-x-1/2"
         v-if="store.popupActive"
       />
-    </Transition>
+    </transition>
     <div class="flex flex-col justify-between h-full">
       <!-- empty div needed for flex reasons -->
       <div></div>
@@ -74,12 +74,12 @@ const replayIcon = computed(() => {
 .canvas {
   height: calc(100% - 48px);
 }
-.v-enter-active,
-.v-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.25s ease;
 }
-.v-enter-from,
-.v-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 </style>
