@@ -80,10 +80,10 @@ onMounted(() => {
     if (
       store.enteredWords[store.enteredWords.length - 1] !== store.todaysWord
     ) {
-      store.showPopup("The word was: " + store.todaysWord.toUpperCase());
-      setTimeout(() => store.activateModal("stats"), 2500);
+      store.showPopup("The word was: " + store.todaysWord.toUpperCase(), "INFO");
+      setTimeout(() => store.activateModal("stats"), 2000);
     } else {
-      setTimeout(() => store.activateModal("stats"), 1000);
+      setTimeout(() => store.activateModal("stats"), 500);
     }
   }
   setInterval(() => {
