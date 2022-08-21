@@ -46,7 +46,7 @@ function sendKey(): void {
 <template>
   <div
     @click="sendKey"
-    class="flex justify-center items-center h-14 p-2 border-solid border-2 cursor-pointer m-0.5"
+    class="keyboard-key flex justify-center items-center h-14 p-2 border-solid border-2 cursor-pointer m-0.5"
     :class="getColor() + getWidth()"
   >
     <div v-if="props.deleteKey" class="select-none">
@@ -60,3 +60,11 @@ function sendKey(): void {
     </div>
   </div>
 </template>
+
+<style scoped>
+@media screen and (max-height: 500px) {
+.keyboard-key {
+	height: 2rem;
+}
+}
+</style>

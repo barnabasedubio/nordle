@@ -4,7 +4,6 @@ import { useStore } from "../store/store";
 import ModalHelp from "./ModalHelp.vue";
 import ModalStats from "./ModalStats.vue";
 import ModalSettings from "./ModalSettings.vue";
-import { kMaxLength } from "buffer";
 
 const emit = defineEmits(["close-modal"]);
 const store = useStore();
@@ -40,14 +39,17 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="w-full h-full absolute top-0 left-0">
+  <div
+    class="flex flex-col justify-between w-full h-full absolute top-0 left-0"
+  >
     <div
       class="backdrop opacity-90 absolute w-full h-full top-0 left-0"
       :class="backdropBackgroundColor"
       @click="closeModal"
     ></div>
+    <div></div>
     <div
-      class="p-2 text-left relative z-50 w-[95%] sm:w-96 mt-24 mx-auto border-solid border-4"
+      class="p-2 text-left relative z-50 w-[95%] sm:w-96 mx-auto border-solid border-4"
       :class="modalBackgroundColor"
     >
       <div @click="closeModal" class="absolute right-4 top-3.5 cursor-pointer">
@@ -57,6 +59,7 @@ onUnmounted(() => {
       <ModalStats v-if="props.content === 'stats'" />
       <ModalSettings v-if="props.content === 'settings'" />
     </div>
+    <div></div>
   </div>
 </template>
 

@@ -15,11 +15,29 @@ const textColor = computed(() => {
 
 <template>
   <div
-    class="flex justify-center items-center w-16 h-16 m-0.5 text-3xl"
-		:class="textColor"
+    class="make-letter-box-responsive flex justify-center items-center w-16 h-16 m-0.5"
+    :class="textColor"
   >
-    <div class="h-8 font-bold select-none">
+    <div class="text-3xl make-letter-responsive h-8 font-bold select-none">
       {{ props.letter }}
     </div>
   </div>
 </template>
+
+<style scoped>
+@media screen and (max-height: 675px) {
+  .make-letter-box-responsive {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+@media screen and (max-height: 500px) {
+  .make-letter-box-responsive {
+    width: 2rem;
+    height: 2rem;
+  }
+  .make-letter-responsive {
+    font-size: 1.4rem;
+  }
+}
+</style>

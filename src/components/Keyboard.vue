@@ -3,7 +3,7 @@ import KeyboardKey from "./KeyboardKey.vue";
 </script>
 
 <template>
-  <div>
+  <div class="keyboard">
     <div class="flex justify-around">
       <KeyboardKey val="Q" />
       <KeyboardKey val="W" />

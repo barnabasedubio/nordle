@@ -26,13 +26,16 @@ function matchColor(index: number): string {
     const color: string = store.matchColors[rowNumber][index];
     if (color === "green") return "bg-nord14";
     if (color === "yellow") return "bg-nord12";
-    else return store.darkTheme ?"bg-nord0 border-2 border-nord3" : "bg-nord4 border border-nord3"
+    else
+      return store.darkTheme
+        ? "bg-nord0 border-2 border-nord3"
+        : "bg-nord4 border border-nord3";
   } else return store.darkTheme ? "bg-nord3" : "bg-nord4 border border-nord3";
 }
 </script>
 
 <template>
-  <div class="flex">
+  <div class="word-row flex justify-between">
     <WordRowLetter :class="matchColor(0)" :letter="getLetter(0)" />
     <WordRowLetter :class="matchColor(1)" :letter="getLetter(1)" />
     <WordRowLetter :class="matchColor(2)" :letter="getLetter(2)" />
@@ -40,3 +43,11 @@ function matchColor(index: number): string {
     <WordRowLetter :class="matchColor(4)" :letter="getLetter(4)" />
   </div>
 </template>
+
+<style scoped>
+@media screen and (max-height: 675px) {
+  .word-row {
+		height: 13%;
+  }
+}
+</style>

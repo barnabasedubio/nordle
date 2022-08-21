@@ -36,16 +36,20 @@ const replayIcon = computed(() => {
     <div class="flex flex-col justify-between h-full">
       <!-- empty div needed for flex reasons -->
       <div></div>
-      <div class="mx-auto">
+      <div
+        class="word-container-responsive-height mx-auto"
+      >
         <div v-if="store.freePlayMode" class="font-bold" :class="textColor">
           Free Play Mode is active
         </div>
-        <WordRow row="0" />
-        <WordRow row="1" />
-        <WordRow row="2" />
-        <WordRow row="3" />
-        <WordRow row="4" />
-        <WordRow row="5" />
+        <div class="flex flex-col justify-between word-row-responsive-height">
+          <WordRow row="0" />
+          <WordRow row="1" />
+          <WordRow row="2" />
+          <WordRow row="3" />
+          <WordRow row="4" />
+          <WordRow row="5" />
+        </div>
       </div>
       <div
         v-if="store.isGameOver && store.freePlayMode"
@@ -81,5 +85,22 @@ const replayIcon = computed(() => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+@media screen and (max-height: 675px) {
+  .word-container-responsive-height {
+    height: 69%;
+  }
+	.word-row-responsive-height {
+		height:90%;
+	}
+}
+@media screen and (max-height: 500px) {
+
+  .word-container-responsive-height {
+    height: 55%;
+  }
+	.word-row-responsive-height {
+		height:94%;
+	}
 }
 </style>
