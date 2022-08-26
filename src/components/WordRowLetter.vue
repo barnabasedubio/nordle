@@ -25,12 +25,6 @@ const textColor = computed(() => {
 </template>
 
 <style scoped>
-@media screen and (max-height: 675px) {
-  .make-letter-box-responsive {
-    width: 2.5rem;
-    height: 2.5rem;
-  }
-}
 @media screen and (max-height: 500px) {
   .make-letter-box-responsive {
     width: 2rem;
